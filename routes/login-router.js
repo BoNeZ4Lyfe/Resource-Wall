@@ -13,8 +13,9 @@ module.exports = (db) => {
     SELECT email, password
     FROM users;
     `)
-      .then(data => {
-        console.log(getUserByEmail(data.rows, req.body.email));
+      .then(data => getUserByEmail(data.rows, req.body.email))
+      .then(emailFound => {
+        !emailFound ? console.log('email is not valid!') : console.log('email is valid!');
       });
     return res.redirect("/");
   });
