@@ -1,3 +1,26 @@
--- Users table seeds here (Example)
-INSERT INTO users (name) VALUES ('Alice');
-INSERT INTO users (name) VALUES ('Kira');
+-- test seeds for users
+insert into users (name, email) values ('bturrill0', 'abutner0@domainmarket.com');
+insert into users (name, email) values ('doleksinski1', 'nagget1@utexas.edu');
+insert into users (name, email) values ('mhadaway2', 'hsimonnot2@mac.com');
+insert into users (name, email) values ('anelle3', 'egame3@technorati.com');
+insert into users (name, email) values ('bhurst4', 'afryd4@discovery.com');
+insert into users (name, email) values ('epovey5', 'lmecozzi5@ameblo.jp');
+insert into users (name, email) values ('cgaukroger6', 'dhoy6@sciencedirect.com');
+insert into users (name, email) values ('twagon7', 'vvater7@pinterest.com');
+insert into users (name, email) values ('mmissenden8', 'nbuzza8@51.la');
+insert into users (name, email) values ('sdougherty9', 'wczajka9@foxnews.com');
+insert into users (name, email) values ('shaberchama', 'cbeamisha@bing.com');
+insert into users (name, email) values ('crydingb', 'nsweetsurb@freewebs.com');
+insert into users (name, email) values ('dsmalleyc', 'htaylotc@shutterfly.com');
+insert into users (name, email) values ('lriolfod', 'wjaneckid@csmonitor.com');
+insert into users (name, email) values ('halsforde', 'croffe@pen.io');
+insert into users (name, email) values ('etilliardsf', 'torwinf@mapquest.com');
+insert into users (name, email) values ('kmarchisog', 'hgoymerg@pinterest.com');
+insert into users (name, email) values ('jsimisterh', 'lwakerleyh@tumblr.com');
+insert into users (name, email) values ('klemasneyi', 'ghuddarti@vinaora.com');
+insert into users (name, email) values ('jchurmsj', 'rmahedyj@topsy.com');
+insert into users (name, email) values ('dnunsonk', 'rboldtk@issuu.com');
+insert into users (name, email) values ('wruzekl', 'jhuskl@slashdot.org');
+insert into users (name, email) values ('wtattersdillm', 'epalkm@sohu.com');
+insert into users (name, email) values ('mdebischofn', 'ftschieraschen@webeden.co.uk');
+insert into users (name, email) values ('gstuddardo', 'vmaclachlano@cbslocal.com');
