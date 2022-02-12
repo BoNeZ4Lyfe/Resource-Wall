@@ -44,6 +44,11 @@ app.use("/api/users", usersRoutes(db));
 app.use("/api/widgets", widgetsRoutes(db));
 // Note: mount other resources here, using the same pattern above
 
+// import the routers
+const loginRouter = require("./routes/login-router");
+// tell express to use the routes as middleware
+app.use("/login", loginRouter(db));
+
 // Home page
 // Warning: avoid creating more routes in this file!
 // Separate them into separate routes files (see above).
@@ -54,6 +59,9 @@ app.get("/", (req, res) => {
 // Get a list of resources
 const resourceRoutes = require("./routes/resource-router");
 app.use("/resources", resourceRoutes(db));
+app.get("/", (req, res) => {
+  res.render("index");
+});
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);
