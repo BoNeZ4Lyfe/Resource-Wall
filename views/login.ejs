@@ -17,6 +17,13 @@
   <%- include('partials/_header') %>
 
   <h1>Log in! 🍠</h1>
+  <form action="/login" method="POST">
+    <label for="email">Email</label>
+    <input name="email">
+    <label for="password">Password</label>
+    <input name="password">
+    <button type="submit">LOGIN</button>
+  </form>
 </body>
 
 </html>
