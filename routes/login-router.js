@@ -1,7 +1,7 @@
 const { query } = require("express");
 const express = require("express");
 const router = express.Router();
-const { getUserByEmail } = require("../public/scripts/helpers");
+const { verifyUserLogin } = require("../public/scripts/helpers");
 
 // GET /login
 module.exports = (db) => {
@@ -13,9 +13,9 @@ module.exports = (db) => {
     SELECT email, password
     FROM users;
     `)
-      .then(data => getUserByEmail(data.rows, req.body.email))
+      .then(data => verifyUserLogin(data.rows, req.body.email, req.body.password))
       .then(emailFound => {
-        !emailFound ? console.log('email is not valid!') : console.log('email is valid!');
+        !emailFound ? console.log('login data is not valid!') : console.log('login data is valid!');
       });
     return res.redirect("/");
   });
