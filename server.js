@@ -44,13 +44,6 @@ app.use("/api/users", usersRoutes(db));
 app.use("/api/widgets", widgetsRoutes(db));
 // Note: mount other resources here, using the same pattern above
 
-<<<<<<< HEAD
-// import the routers
-const userRouter = require("./routes/user-router");
-// tell express to use the routes as middleware
-app.use("/users", userRouter(db));
-=======
->>>>>>> abc668da725d628670d4f93aec21d50a9308b43b
 // Home page
 // Warning: avoid creating more routes in this file!
 // Separate them into separate routes files (see above).
