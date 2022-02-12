@@ -1,6 +1,7 @@
 const { query } = require("express");
 const express = require("express");
 const router = express.Router();
+const { getUserByEmail } = require("../public/scripts/helpers");
 
 // GET /login
 module.exports = (db) => {
@@ -13,7 +14,7 @@ module.exports = (db) => {
     FROM users;
     `)
       .then(data => {
-        console.log(data.rows);
+        console.log(getUserByEmail(data.rows, req.body.email));
       });
     return res.redirect("/");
   });
