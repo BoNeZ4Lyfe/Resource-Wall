@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
 
-// GET / users
+// GET / resources
 module.exports = (db) => {
   router.get("/", (req, res) => {
     db.query(`SELECT * FROM users LIMIT 5;`)
-      .then((users) => {
-        res.render(users.rows);
+      .then((data) => {
+        res.json(data.rows);
       })
       .catch((err) => {
         res.status(500).json({ error: err.message });
