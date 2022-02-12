@@ -48,16 +48,18 @@ app.use("/api/widgets", widgetsRoutes(db));
 
 // import the routers
 const userRouter = require("./routes/user-router");
+const loginRouter = require("./routes/login-router");
 // tell express to use the routes as middleware
 app.use("/users", userRouter(db));
+app.use("/login", loginRouter(db));
 
 // Home page
 // Warning: avoid creating more routes in this file!
 // Separate them into separate routes files (see above).
 
-// app.get("/", (req, res) => {
-//   res.render("index");
-// });
+app.get("/", (req, res) => {
+  res.render("index");
+});
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);
