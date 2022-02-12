@@ -50,7 +50,6 @@ app.use("/api/widgets", widgetsRoutes(db));
 const userRouter = require("./routes/user-router");
 // tell express to use the routes as middleware
 app.use("/users", userRouter(db));
-
 // Home page
 // Warning: avoid creating more routes in this file!
 // Separate them into separate routes files (see above).
