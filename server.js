@@ -5,8 +5,14 @@ require("dotenv").config();
 const PORT = process.env.PORT || 8080;
 const sassMiddleware = require("./lib/sass-middleware");
 const express = require("express");
+const cookieSession = require("cookie-session");
 const app = express();
 const morgan = require("morgan");
+
+app.use(cookieSession({
+  name: 'session',
+  keys: ['key1']
+}));
 
 // PG database client/connection setup
 const { Pool } = require("pg");
