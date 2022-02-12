@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Home Page</title>
+    <title>Resources</title>
 
     <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
     <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
@@ -15,9 +15,7 @@
   <body>
     <%- include('partials/_header') %>
 
-    <h1>WELCOME TO THE HOMEPAGE!!!🥔</h1>
-    <main>
-      <div class="resources"></div>
-    </main>
+    <h1>YO RESOURCES WALL🥔</h1>
+    <main><%= JSON.stringify(locals.resources) %></main>
   </body>
 </html>

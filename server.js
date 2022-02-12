@@ -44,7 +44,6 @@ app.use("/api/users", usersRoutes(db));
 app.use("/api/widgets", widgetsRoutes(db));
 // Note: mount other resources here, using the same pattern above
 
-
 // import the routers
 const loginRouter = require("./routes/login-router");
 const registerRouter = require("./routes/register-router");
@@ -64,6 +63,7 @@ app.get("/", (req, res) => {
 // Get a list of resources
 const resourceRoutes = require("./routes/resource-router");
 app.use("/resources", resourceRoutes(db));
+
 app.get("/", (req, res) => {
   res.render("index");
 });
