@@ -8,6 +8,7 @@ module.exports = (db) => {
   router.get("/", (req, res) => {
     res.render("login");
   });
+
   router.post("/", (req, res) => {
     db.query(`
     SELECT email, password
@@ -15,7 +16,9 @@ module.exports = (db) => {
     `)
       .then(data => verifyUserLogin(data.rows, req.body.email, req.body.password))
       .then(emailFound => {
-        !emailFound ? console.log('login data is not valid!') : console.log('login data is valid!');
+        if (emailFound) {
+
+        }
       });
     return res.redirect("/");
   });
