@@ -14,8 +14,38 @@
 
   <body>
     <%- include('partials/_header') %>
-
-    <h1>WELCOME TO THE HOMEPAGE!!!🥔</h1>
-    <main><%= JSON.stringify(locals.resources) %></main>
+    <main>
+      <%= JSON.stringify(locals.resources) %> <% for(const resource of
+      locals.resources) { %> <% console.log(resource) %>
+      <div class="resource-containter">
+        <thead>
+          <tr>
+            <th scope="col">Title</th>
+            <th scope="col">URL</th>
+            <th scope="col">Description</th>
+            <th scope="col">TOPIC</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><%= resource.title %></td>
+            <td><%= resource.url %></td>
+            <td><%= resource.description %></td>
+            <td><%= resource.topic_id %></td>
+            <td>
+              <button type="submit">Edit</button>
+            </td>
+            <td>
+              <button type="submit">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </div>
+      <% } %>
+    </main>
   </body>
 </html>
+
+<!-- "topic_id":5,"url":"http://nature.com","title":"praesent","description":"In hac
+habitasse platea dictumst. Aliquam augue quam, sollicitudin vitae, consectetuer
+eget, rutrum at, lorem." -->

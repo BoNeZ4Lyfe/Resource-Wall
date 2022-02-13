@@ -14,8 +14,8 @@ module.exports = (db) => {
       [userId]
     )
       .then((data) => {
-        // res.json(data.rows); // Not API request anymore
-        res.render("resources", { resources: data.rows }); // <---- new edit
+        res.render("resources", { resources: data.rows });
+        console.log(typeof data.rows);
       })
       .catch((err) => {
         res.status(500).json({ error: err.message });
