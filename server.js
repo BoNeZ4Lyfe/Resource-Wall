@@ -52,9 +52,11 @@ app.use("/api/widgets", widgetsRoutes(db));
 
 
 // import the routers
+const logoutRouter = require("./routes/logout-router");
 const loginRouter = require("./routes/login-router");
 const registerRouter = require("./routes/register-router");
 // tell express to use the routes as middleware
+app.use("/logout", logoutRouter(db));
 app.use("/login", loginRouter(db));
 app.use("/register", registerRouter(db));
 
