@@ -5,6 +5,7 @@ const { verifyUserLogin } = require("../public/scripts/helpers");
 module.exports = (db) => {
   // GET /login
   router.get("/", (req, res) => {
+    console.log(req.session.username, req.session.loggedIn)
     res.render("login", { loggedIn: req.session.loggedIn, username: req.session.username });
   });
 
@@ -19,7 +20,7 @@ module.exports = (db) => {
           console.log("Error: User info not found in database");
           return res.status(403).send("Invalid login credentials, please check your name and password then try again");
         }
-        req.session.loggedin = true;
+        req.session.loggedIn = true;
         req.session.username = user.name;
         res.redirect("/login");
       });
