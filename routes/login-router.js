@@ -1,4 +1,4 @@
-const { query } = require("express");
+// const { query } = require("express");
 const express = require("express");
 const router = express.Router();
 const { verifyUserLogin } = require("../public/scripts/helpers");
@@ -11,16 +11,18 @@ module.exports = (db) => {
 
   router.post("/", (req, res) => {
     db.query(`
-    SELECT email, password
+    SELECT name, email, password
     FROM users;
     `)
       .then(data => verifyUserLogin(data.rows, req.body.email, req.body.password))
-      .then(emailFound => {
-        if (emailFound) {
-
+      .then(user => {
+        if (!user) {
+          console.log("Error: User info not found in database");
+          return res.status(403).send("Invalid login credentials, please check your name and password then try again");
         }
+        req.session["user_id"] = user.email;
+        res.redirect("/");
       });
-    return res.redirect("/");
   });
   return router;
 };

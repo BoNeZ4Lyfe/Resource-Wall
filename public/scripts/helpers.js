@@ -3,12 +3,12 @@ const verifyUserLogin = (data, targetEmail, targetPassword) => {
   // iterates through database comparing values of email keys to target email
   for (const user of data) {
     if (user.email === targetEmail && user.password === targetPassword) {
-      return true;
+      return user;
     }
   }
-  return false;
+  return null;
 };
 
 module.exports = {
-  verifyUserLogin
+  verifyUserLogin,
 }
