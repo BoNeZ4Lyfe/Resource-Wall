@@ -5,8 +5,11 @@ const { verifyUserLogin } = require("../public/scripts/helpers");
 module.exports = (db) => {
   // GET /login
   router.get("/", (req, res) => {
-    console.log(req.session.username, req.session.loggedIn)
-    res.render("login", { loggedIn: req.session.loggedIn, username: req.session.username });
+    if (!req.session.loggedIn || !req.session.username) {
+      res.render("login", { loggedIn: req.session.loggedIn, username: req.session.username });
+    } else {
+      res.redirect("/");
+    }
   });
 
   router.post("/", (req, res) => {
@@ -22,7 +25,7 @@ module.exports = (db) => {
         }
         req.session.loggedIn = true;
         req.session.username = user.name;
-        res.redirect("/login");
+        res.redirect("/");
       });
   });
   return router;
