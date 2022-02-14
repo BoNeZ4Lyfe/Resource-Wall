@@ -5,8 +5,14 @@ require("dotenv").config();
 const PORT = process.env.PORT || 8080;
 const sassMiddleware = require("./lib/sass-middleware");
 const express = require("express");
+const cookieSession = require("cookie-session");
 const app = express();
 const morgan = require("morgan");
+
+app.use(cookieSession({
+  name: 'session',
+  keys: ['key1']
+}));
 
 // PG database client/connection setup
 const { Pool } = require("pg");
@@ -45,9 +51,11 @@ app.use("/api/widgets", widgetsRoutes(db));
 // Note: mount other resources here, using the same pattern above
 
 // import the routers
+const logoutRouter = require("./routes/logout-router");
 const loginRouter = require("./routes/login-router");
 const registerRouter = require("./routes/register-router");
 // tell express to use the routes as middleware
+app.use("/logout", logoutRouter(db));
 app.use("/login", loginRouter(db));
 app.use("/register", registerRouter(db));
 
@@ -57,19 +65,19 @@ app.use("/register", registerRouter(db));
 // Warning: avoid creating more routes in this file!
 // Separate them into separate routes files (see above).
 app.get("/", (req, res) => {
-  res.render("index");
+  res.render("index", { loggedIn: req.session.loggedIn, username: req.session.username });
 });
 
 // Get a list of resources
 const resourceRoutes = require("./routes/resource-router");
 app.use("/resources", resourceRoutes(db));
 
-app.get("/", (req, res) => {
-  res.render("index");
-});
+// app.get("/", (req, res) => {
+//   res.render("index");
+// });
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);
 });
 
-module.exports = db;
+module.exports = { db };

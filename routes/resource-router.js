@@ -35,8 +35,12 @@ module.exports = (db) => {
       [userId]
     )
       .then((data) => {
+        const user = {
+          loggedIn: req.session.loggedIn,
+          username: req.session.username,
+        };
         // res.json(data.rows); // Not API request anymore
-        res.render("resources", { resources: data.rows }); // <---- new edit
+        res.render("resources", { resources: data.rows, ...user }); // <---- new edit
       })
       .catch((err) => {
         res.status(500).json({ error: err.message });
