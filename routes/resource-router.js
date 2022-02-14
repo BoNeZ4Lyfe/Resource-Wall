@@ -34,12 +34,14 @@ module.exports = (db) => {
       [userId]
     )
       .then((data) => {
-        const user = {
+        const templateVars = {
+          resources: data.rows,
           loggedIn: req.session.loggedIn,
-          username: req.session.username,
+          userID: req.session.userID,
+          username: req.session.username
         };
         // res.json(data.rows); // Not API request anymore
-        res.render("resources", { resources: data.rows, ...user }); // <---- new edit
+        res.render("resources", templateVars); // <---- new edit
       })
       .catch((err) => {
         res.status(500).json({ error: err.message });

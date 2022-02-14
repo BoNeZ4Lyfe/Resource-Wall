@@ -65,16 +65,17 @@ app.use("/register", registerRouter(db));
 // Warning: avoid creating more routes in this file!
 // Separate them into separate routes files (see above).
 app.get("/", (req, res) => {
-  res.render("index", { loggedIn: req.session.loggedIn, username: req.session.username });
+  const templateVars = {
+    loggedIn: req.session.loggedIn,
+    userID: req.session.userID,
+    username: req.session.username
+  };
+  res.render("index", templateVars);
 });
 
 // Get a list of resources
 const resourceRoutes = require("./routes/resource-router");
 app.use("/resources", resourceRoutes(db));
-
-// app.get("/", (req, res) => {
-//   res.render("index");
-// });
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);

@@ -5,10 +5,16 @@ const router = express.Router();
 // GET /register
 module.exports = (db) => {
   router.get("/", (req, res) => {
-    res.render("register", {
-      loggedIn: req.session.loggedIn,
-      username: req.session.username,
-    });
+    if (!req.session.loggedIn) {
+      const templateVars = {
+        loggedIn: req.session.loggedIn,
+        userID: req.session.userID,
+        username: req.session.username
+      };
+      res.render("register", templateVars);
+    } else {
+      res.redirect("/");
+    }
   });
 
   router.post("/", (req, res) => {
@@ -18,6 +24,7 @@ module.exports = (db) => {
     if (user.password === password) {
       addUser(user, db);
       req.session.loggedIn = true;
+      req.session.userID = user.id;
       req.session.username = user.name;
       res.redirect("/");
     } else {
