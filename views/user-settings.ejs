@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title>Login Page</title>
+  <title>User Settings</title>
 
   <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
   <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
@@ -16,15 +16,22 @@
 <body>
   <%- include('partials/_header') %>
 
-  <h1>Log in! 🍠</h1>
-  <form action="/login" method="POST">
-    <label for="email">Email</label>
-    <input type="email "name="email" placeholder="email"> <!-- added type and place holder -->
-    <label for="password">Password</label>
-    <input type= "password" name="password" placeholder="password" required>  <!-- added type and place holder -->
-    <button type="submit">LOGIN</button>
+  <h1>User Settings 🍠</h1>
+  <form action="/user-settings/username" method="POST">
+    <label for="username">Change Username</label>
+    <input type="text "name="username" placeholder="new username">
+    <button type="submit">SUBMIT</button>
+  </form>
+  <form action="/user-settings/email" method="POST">
+    <label for="email">Change Email</label>
+    <input type="email "name="email" placeholder="new email">
+    <button type="submit">SUBMIT</button>
+  </form>
+  <form action="/user-settings/password" method="POST">
+    <label for="password">Change Password</label>
+    <input type="password" name="password" placeholder="new password">
+    <button type="submit">SUBMIT</button>
   </form>
 </body>
 
 </html>
- <!-- added type and place holder -->
