@@ -10,16 +10,26 @@
 
     <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
     <script type="text/javascript" src="/scripts/app.js"></script>
+    <script
+      type="text/javascript"
+      src="/scripts/components/new-resource-form.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="/scripts/components/comment.js"
+    ></script>
   </head>
 
   <body>
     <%- include('partials/_header') %>
 
     <main>
-      <!-- <%= JSON.stringify(locals.resources) %>  -->
-      <% for(const resource of locals.resources) { %> <% console.log(resource)
-      %>
+      <div>
+        <button class="btn btn--new">Add new</button>
+      </div>
+
       <div class="resource-containter">
+        <% for(const resource of locals.resources) { %>
         <article class="resource">
           <header>
             <div class="resource-title">
@@ -30,13 +40,13 @@
           <div class="resource-content">
             <p><%= resource.description %></p>
           </div>
+          <button class="btn btn--comment">Add comment</button>
         </article>
+        <% } %>
       </div>
-      <% } %>
     </main>
   </body>
 </html>
-<<<<<<< HEAD =======
 
 <!-- "topic_id":5,"url":"http://nature.com","title":"praesent","description":"In hac
 habitasse platea dictumst. Aliquam augue quam, sollicitudin vitae, consectetuer

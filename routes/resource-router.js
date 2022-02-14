@@ -30,7 +30,6 @@ module.exports = (db) => {
       `
     SELECT * FROM resources
     JOIN users ON user_id = $1
-    LIMIT 5;
     ;`,
       [userId]
     )
@@ -48,7 +47,3 @@ module.exports = (db) => {
   });
   return router;
 };
-
-// <%= JSON.stringify(locals.resources) %>
-
-// insert into resources (user_id, topic_id, url, title, description, created_at) values (6, 3, 'http://istockphoto.com', 'vestibulum aliquet ultrices', 'Curabitur in libero ut massa volutpat convallis. Morbi odio odio, elementum eu, interdum eu, tincidunt in, leo.', '2018-08-21 04:43:29');
