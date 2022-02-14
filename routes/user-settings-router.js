@@ -59,5 +59,17 @@ module.exports = (db) => {
       .catch(err => console.log(err.message));
   })
 
+  router.post("/password", (req, res) => {
+    if (!req.body.password) {
+      res.status(400).send("Please enter a new Password");
+    }
+
+    const id = req.session.userID;
+    const newPassword = req.body.password;
+
+    updateUser(db, "password", id, newPassword);
+    res.redirect("/user-settings");
+  })
+
   return router;
 };
