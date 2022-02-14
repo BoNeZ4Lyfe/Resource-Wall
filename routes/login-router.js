@@ -3,10 +3,10 @@ const { userEmailLookup } = require("../public/scripts/helpers");
 const router = express.Router();
 
 
+// GET /login
 module.exports = (db) => {
-  // GET /login
   router.get("/", (req, res) => {
-    if (!req.session.loggedIn || !req.session.username) {
+    if (!req.session.loggedIn) {
       const templateVars = {
         loggedIn: req.session.loggedIn,
         userID: req.session.userID,
@@ -39,6 +39,7 @@ module.exports = (db) => {
           req.session.username = user.name;
           return res.redirect("/");
         } else {
+          console.log("User entered incorrect password");
           return res.status(403).send("Incorrect password.");
         }
       });
