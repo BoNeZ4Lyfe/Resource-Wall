@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { verifyUserLogin } = require("../public/scripts/helpers");
+const { userEmailLookup } = require("../public/scripts/helpers");
 
 module.exports = (db) => {
   // GET /login
@@ -13,19 +13,27 @@ module.exports = (db) => {
   });
 
   router.post("/", (req, res) => {
+    const email = req.body.email;
+    const password = req.body.password;
+
     db.query(`
     SELECT *
     FROM users;
     `)
-      .then(data => verifyUserLogin(data.rows, req.body.email, req.body.password))
+      .then(data => userEmailLookup(data.rows, email))
       .then(user => {
         if (!user) {
-          console.log("Error: User info not found in database");
-          return res.status(403).send("Invalid login credentials, please check your name and password then try again");
+          console.log("Error: email not found in database");
+          return res.status(403).send("There is no user registered to that email address.");
         }
-        req.session.loggedIn = true;
-        req.session.username = user.name;
-        res.redirect("/");
+
+        if (user.password === password) {
+          req.session.loggedIn = true;
+          req.session.username = user.name;
+          res.redirect("/");
+        } else {
+          return res.status(403).send("Incorrect password.");
+        }
       });
   });
   return router;
