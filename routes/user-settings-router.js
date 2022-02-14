@@ -36,7 +36,7 @@ module.exports = (db) => {
         }
       })
       .catch(err => console.log(err.message));
-  })
+  });
 
   router.post("/email", (req, res) => {
     if (!req.body.email) {
@@ -57,7 +57,7 @@ module.exports = (db) => {
         }
       })
       .catch(err => console.log(err.message));
-  })
+  });
 
   router.post("/password", (req, res) => {
     if (!req.body.password) {
@@ -69,7 +69,7 @@ module.exports = (db) => {
 
     updateUser(db, "password", id, newPassword);
     res.redirect("/user-settings");
-  })
+  });
 
   return router;
 };

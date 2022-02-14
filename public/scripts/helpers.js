@@ -7,7 +7,7 @@ const getUsers = (db) => {
     `)
     .then(users => users.rows)
     .catch(err => console.log(err.message));
-}
+};
 
 // checks user emails against target email and returns user object if email exists in database
 const userEmailLookup = (users, targetEmail) => {
@@ -37,11 +37,11 @@ const updateUser = (db, property, id, update) => {
     WHERE id = ${id};
     `, [update])
     .catch(err => console.log(err.message));
-}
+};
 
 
 //Adds new user to the database
-const addUser = function (user, db) {
+const addUser = function(user, db) {
   const values = [`${user.name}`, `${user.email}`, `${user.password}`];
   const queryStr = `INSERT INTO users (name, email, password)
   VALUES ($1, $2, $3) RETURNING *;`;
