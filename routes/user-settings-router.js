@@ -28,6 +28,8 @@ module.exports = (db) => {
           res.status(400).send("Username already in use");
         } else {
           updateUser(db, "name", id, newUsername);
+          req.session.username = null;
+          req.session.username = newUsername;
           res.redirect("/user-settings");
         }
       })
