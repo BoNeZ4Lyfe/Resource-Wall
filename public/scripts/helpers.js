@@ -1,13 +1,34 @@
-// checks user emails against target email and returns true or false
-const userEmailLookup = (data, targetEmail) => {
-  // iterates through database comparing values of email keys to target email
-  for (const user of data) {
+// queries database for user table and returns an array of user objects
+const getUsers = (db) => {
+  return db
+    .query(`
+    SELECT *
+    FROM users;
+    `)
+    .then(users => users.rows)
+    .catch(err => console.log(err.message));
+}
+
+// checks user emails against target email and returns user object if email exists in database
+const userEmailLookup = (users, targetEmail) => {
+  for (const user of users) {
     if (user.email === targetEmail) {
       return user;
     }
   }
   return null;
 };
+
+// checks user name against target username and returns user object if username exists in database
+const usernameLookup = (users, targetUsername) => {
+  for (const user of users) {
+    if (user.name === targetUsername) {
+      return user;
+    }
+  }
+  return null;
+};
+
 
 //Adds new user to the database
 const addUser = function (user, db) {
@@ -25,4 +46,5 @@ const addUser = function (user, db) {
 module.exports = {
   addUser,
   userEmailLookup,
+  usernameLookup
 };
