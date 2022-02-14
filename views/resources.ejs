@@ -15,7 +15,24 @@
   <body>
     <%- include('partials/_header') %>
 
-    <h1>YO RESOURCES WALL🥔</h1>
-    <main><%= JSON.stringify(locals.resources) %></main>
+    <main>
+      <!-- <%= JSON.stringify(locals.resources) %>  -->
+      <% for(const resource of locals.resources) { %> <% console.log(resource)
+      %>
+      <div class="resource-containter">
+        <article class="resource">
+          <header>
+            <div class="resource-title">
+              <span><%= resource.title %></span>
+            </div>
+            <span class="resource-url"><%= resource.url %></span>
+          </header>
+          <div class="resource-content">
+            <p><%= resource.description %></p>
+          </div>
+        </article>
+      </div>
+      <% } %>
+    </main>
   </body>
 </html>

@@ -26,6 +26,12 @@ nav {
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  background: #00FFFF;
+  background: #00ffff;
   padding: 0 1.5em;
+}
+
+article.resource {
+  margin-bottom: 1rem;
+  border: 2px solid blue;
+  width: 50%;
 }
