@@ -1,6 +1,7 @@
 const express = require("express");
-const router = express.Router();
 const { userEmailLookup } = require("../public/scripts/helpers");
+const router = express.Router();
+
 
 module.exports = (db) => {
   // GET /login
