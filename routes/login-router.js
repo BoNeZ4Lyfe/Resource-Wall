@@ -7,7 +7,12 @@ module.exports = (db) => {
   // GET /login
   router.get("/", (req, res) => {
     if (!req.session.loggedIn || !req.session.username) {
-      res.render("login", { loggedIn: req.session.loggedIn, username: req.session.username });
+      const templateVars = {
+        loggedIn: req.session.loggedIn,
+        userID: req.session.userID,
+        username: req.session.username
+      };
+      res.render("login", templateVars);
     } else {
       res.redirect("/");
     }
@@ -30,8 +35,9 @@ module.exports = (db) => {
 
         if (user.password === password) {
           req.session.loggedIn = true;
+          req.session.userID = user.id;
           req.session.username = user.name;
-          res.redirect("/");
+          return res.redirect("/");
         } else {
           return res.status(403).send("Incorrect password.");
         }

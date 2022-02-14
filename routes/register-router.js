@@ -5,10 +5,12 @@ const router = express.Router();
 // GET /register
 module.exports = (db) => {
   router.get("/", (req, res) => {
-    res.render("register", {
+    const templateVars = {
       loggedIn: req.session.loggedIn,
-      username: req.session.username,
-    });
+      userID: req.session.userID,
+      username: req.session.username
+    };
+    res.render("register", templateVars);
   });
 
   router.post("/", (req, res) => {
