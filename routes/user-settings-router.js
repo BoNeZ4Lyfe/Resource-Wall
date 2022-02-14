@@ -38,5 +38,26 @@ module.exports = (db) => {
       .catch(err => console.log(err.message));
   })
 
+  router.post("/email", (req, res) => {
+    if (!req.body.email) {
+      res.status(400).send("Please enter a new email");
+    }
+
+    const id = req.session.userID;
+    const newEmail = req.body.email;
+
+    getUsers(db)
+      .then(users => userEmailLookup(users, newEmail))
+      .then(user => {
+        if (user) {
+          res.status(400).send("Email already in use");
+        } else {
+          updateUser(db, "email", id, newEmail);
+          res.redirect("/user-settings");
+        }
+      })
+      .catch(err => console.log(err.message));
+  })
+
   return router;
 };
