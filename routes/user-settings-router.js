@@ -18,10 +18,6 @@ module.exports = (db) => {
 
 
   router.post("/username", (req, res) => {
-    if (!req.body.username) {
-      res.status(400).send("Please enter a new username");
-    }
-
     const id = req.session.userID;
     const newUsername = req.body.username;
 
@@ -39,10 +35,6 @@ module.exports = (db) => {
   });
 
   router.post("/email", (req, res) => {
-    if (!req.body.email) {
-      res.status(400).send("Please enter a new email");
-    }
-
     const id = req.session.userID;
     const newEmail = req.body.email;
 
@@ -60,10 +52,6 @@ module.exports = (db) => {
   });
 
   router.post("/password", (req, res) => {
-    if (!req.body.password) {
-      res.status(400).send("Please enter a new Password");
-    }
-
     const id = req.session.userID;
     const newPassword = req.body.password;
 
