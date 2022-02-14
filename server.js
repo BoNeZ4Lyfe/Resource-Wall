@@ -5,8 +5,14 @@ require("dotenv").config();
 const PORT = process.env.PORT || 8080;
 const sassMiddleware = require("./lib/sass-middleware");
 const express = require("express");
+const cookieSession = require("cookie-session");
 const app = express();
 const morgan = require("morgan");
+
+app.use(cookieSession({
+  name: 'session',
+  keys: ['key1']
+}));
 
 // PG database client/connection setup
 const { Pool } = require("pg");
@@ -58,7 +64,7 @@ app.use("/register", registerRouter(db));
 // Warning: avoid creating more routes in this file!
 // Separate them into separate routes files (see above).
 app.get("/", (req, res) => {
-  res.render("index");
+  res.render("index", { loggedIn: req.session.loggedIn, username: req.session.username });
 });
 
 // Get a list of resources
@@ -72,4 +78,4 @@ app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);
 });
 
-module.exports = db;
+module.exports = { db };
