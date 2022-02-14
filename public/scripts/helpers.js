@@ -29,6 +29,16 @@ const usernameLookup = (users, targetUsername) => {
   return null;
 };
 
+const updateUser = (db, property, id, update) => {
+  return db
+    .query(`
+    UPDATE users
+    SET ${property} = $1
+    WHERE id = ${id};
+    `, [update])
+    .catch(err => console.log(err.message));
+}
+
 
 //Adds new user to the database
 const addUser = function (user, db) {
@@ -45,6 +55,8 @@ const addUser = function (user, db) {
 //moved to the bottom
 module.exports = {
   addUser,
+  getUsers,
   userEmailLookup,
-  usernameLookup
+  usernameLookup,
+  updateUser
 };
