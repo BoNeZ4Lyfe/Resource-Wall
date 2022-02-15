@@ -4,15 +4,17 @@ const router = express.Router();
 
 module.exports = (db) => {
   router.get("/", (req, res) => {
-    const userId = 1; // TODO: add session/cookie for logged in user later
     db.query(
       `
-    SELECT * FROM resources
-    JOIN users ON user_id = $1
-    ;`,
-      [userId]
+      SELECT resources.*, users.*, COUNT(resource_comments.id) AS count
+      FROM resources
+      JOIN users ON user_id = users.id
+      JOIN resource_comments ON resources.id = resource_id
+      GROUP BY resources.id, users.id
+    ;`
     )
       .then((data) => {
+        console.log("DATA", data.rows);
         const templateVars = {
           resources: data.rows,
           loggedIn: req.session.loggedIn,
@@ -26,18 +28,21 @@ module.exports = (db) => {
         res.status(500).json({ error: err.message });
       });
   });
+
+  router.post("/comments", (req, res) => {
+    console.log("REQUEST", req.body);
+    const { comment, resource_id } = req.body;
+    const user_id = req.session.userID;
+
+    let query = `
+    insert into resource_comments (resource_id, user_id, comment) values ($1, $2, $3);
+    `;
+    const values = [resource_id, user_id, comment];
+
+    db.query(query, values).then((res) => {
+      //redirect to the user page with individual resource
+    });
+  });
+
   return router;
 };
-
-// module.exports = (db) => {
-//   router
-//     .post("/", (req, res) => {
-//       db.query(`
-//     INSERT INTO resource_comments (comment)
-//     VALUES ("comments");
-//     `);
-//     })
-//     .then(() => {
-//       console.log(res);
-//     });
-// };

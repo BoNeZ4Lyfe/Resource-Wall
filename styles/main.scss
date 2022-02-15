@@ -53,7 +53,7 @@ article.resource {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  margin-bottom: .5rem;
+  margin-bottom: 0.5rem;
   border: 2px solid blue;
   width: 40%;
 }
@@ -81,7 +81,8 @@ div footer {
   display: block;
 }
 
-.new-comment-form {
-  display: flex;
-  flex-direction: row;
-}
+// Commented out right now as need to hide the form
+// .new-comment-form {
+//   display: flex;
+//   flex-direction: row;
+// }

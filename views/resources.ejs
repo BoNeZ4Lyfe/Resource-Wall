@@ -24,7 +24,7 @@
     <%- include('partials/_header') %>
 
     <main>
-      <form action="/resource_comment" method="post" id="comment-create" class="new-comment-form hide">
+      <form action="/resources/comment" method="post" id="comment-create" class="new-comment-form hide">
         <div class="new-comment-form">
           <label for="new-comment">Comment</label>
           <textarea
@@ -86,11 +86,12 @@
             </div>
             <span class="resource-url"><%= resource.url %></span>
           </header>
-          <div class="resource-content">
+          <div class="resource-content" id="<%= resource.id %>" >
             <p><%= resource.description %></p>
+            <p><%= resource.count %> comments</p>
           </div>
           <footer>
-            <button class="btn btn--comment">Add comment</button>
+              <button class="btn btn--comment" id="<%= resource.id %>" type="submit">Add comment</button>
             <p>LIKES</p>
           </footer>
         </article>
@@ -98,4 +99,5 @@
       </div>
     </main>
   </body>
-</html>
+  </html>
+
