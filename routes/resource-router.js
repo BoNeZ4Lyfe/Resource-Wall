@@ -47,7 +47,19 @@ module.exports = (db) => {
   });
 
   router.post("/:id", (req, res) => {
-    console.log(req.body);
+    const resourceID = req.body.resource;
+    const userID = req.body.user;
+
+    if (req.body.rating) {
+      rateResource(db, resourceID, userID, req.body.rating)
+        .then(res => console.log("Resource rated: ", res))
+        .catch(err => console.log("rateResource: ", err.message));
+    } else {
+      likeResource(db, resourceID, userID)
+        .then(res => console.log("Resource liked: ", res))
+        .catch(err => console.log("likeResource: ", err.message));
+    }
+
   });
 
   return router;

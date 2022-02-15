@@ -118,14 +118,14 @@ const likeResource = (db, resourceID, userID) => {
     .catch(err => console.log("likeResource: ", err.message));
 };
 
-const rateResource = (db, resourceID, userID) => {
+const rateResource = (db, resourceID, userID, rating) => {
   const queryString = `
     INSERT INTO ratings (resource_id, user_id, rating)
     VALUES (${resourceID}, ${userID}, $1)
     RETURNING *;`
 
   return db
-    .query(queryString)
+    .query(queryString, [rating])
     .then(res => res.rows[0])
     .catch(err => console.log("rateResource: ", err.message));
 };
