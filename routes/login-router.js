@@ -2,7 +2,6 @@ const express = require("express");
 const { userEmailLookup, getUsers } = require("../public/scripts/helpers");
 const router = express.Router();
 
-
 // GET /login
 module.exports = (db) => {
   router.get("/", (req, res) => {
@@ -19,10 +18,6 @@ module.exports = (db) => {
   });
 
   router.post("/", (req, res) => {
-    if (!req.body.email || !req.body.password) {
-      res.status(400).send("Please enter a valid email and password");
-    }
-
     const email = req.body.email;
     const password = req.body.password;
 
