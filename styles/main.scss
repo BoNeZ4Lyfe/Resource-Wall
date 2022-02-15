@@ -91,7 +91,21 @@ article.resource {
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
-  margin: 7rem;
+  margin: 7rem 7rem 2rem;
   width: 60%;
   border: 3px solid blue;
+}
+
+#comments {
+  width: 60%;
+}
+
+.comment {
+  border: 3px solid blue;
+  margin-bottom: 1rem;
+}
+
+.main-text {
+  border-bottom: 2px solid blue;
+  padding-bottom: 1rem;
 }

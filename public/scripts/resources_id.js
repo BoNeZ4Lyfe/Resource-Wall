@@ -11,7 +11,7 @@ $(() => {
         </header>
         <div class="resource-content">
         <a href="${resource.url}">${resource.url}</a>
-        <p>${resource.description}<p>
+        <p class="main-text">${resource.description}<p>
         <p>Created ${timeago.format(resource.created_at)} by ${resource.creator}</p>
       </div>
       <footer class="resource-head-foot">
@@ -26,8 +26,10 @@ $(() => {
   const createCommentElement = (comment) => {
     return `
     <article class="comment">
-      <p>${comment.comment}</p>
-      <p>Written ${timeago.format(comment.created_at)} by ${comment.user_name}</p>
+      <div class="resource-content">
+        <p class="main-text">${comment.comment}</p>
+        <p>Written ${timeago.format(comment.created_at)} by ${comment.user_name}</p>
+      </div>
     </article>`;
   }
 
