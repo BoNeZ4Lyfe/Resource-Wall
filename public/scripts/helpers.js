@@ -46,14 +46,16 @@ const searchDatabase = (db, search) => {
   JOIN users ON user_id = users.id
   JOIN user_likes ON user_likes.resource_id = resources.id
   JOIN ratings ON ratings.resource_id = resources.id
-  WHERE title LIKE '%$1%' OR description LIKE '%$1%'
+  WHERE title LIKE ('%' || $1 || '%') OR description LIKE ('%' || $1 || '%')
   GROUP BY resources.url, resources.title, resources.description, resources.created_at, users.name
   ORDER BY rating, likes;
   `
 
+  const values = [search];
+
   return db
-    .query(queryString, [search])
-    .then(users => users.rows)
+    .query(queryString, values)
+    .then(result => result.rows)
     .catch(err => console.log(err.message));
 };
 
