@@ -39,6 +39,23 @@ const updateUser = (db, property, id, update) => {
     .catch(err => console.log(err.message));
 };
 
+const searchDatabase = (db, search) => {
+  const queryString = `
+  SELECT url, title, description, created_at, users.name, count(user_likes.*) as likes, avg(ratings.rating) as rating
+  FROM resources
+  JOIN users ON user_id = users.id
+  JOIN user_likes ON user_likes.resource_id = resources.id
+  JOIN ratings ON ratings.resource_id = resources.id
+  WHERE title LIKE '%$1%' OR description LIKE '%$1%'
+  GROUP BY resources.url, resources.title, resources.description, resources.created_at, users.name
+  ORDER BY rating, likes;
+  `
+
+  return db
+    .query(queryString, [search])
+    .then(users => users.rows)
+    .catch(err => console.log(err.message));
+};
 
 //Adds new user to the database
 const addUser = function(user, db) {
@@ -58,5 +75,6 @@ module.exports = {
   getUsers,
   userEmailLookup,
   usernameLookup,
-  updateUser
+  updateUser,
+  searchDatabase
 };
