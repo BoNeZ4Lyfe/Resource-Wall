@@ -2,6 +2,13 @@
   <nav>
     <h2>-- placeholder app name! --</h2>
     <div>
+      <form action="/search" method="GET">
+        <label for="search">Search</label>
+        <input type="search" name="search" placeholder="search for resources" required>
+        <button type="submit">SUBMIT</button>
+      </form>
+    </div>
+    <div>
       <% if (!loggedIn || !userID) { %>
         <a href="/login">LOGIN</a>
         <a href="/register">REGISTER</a>
