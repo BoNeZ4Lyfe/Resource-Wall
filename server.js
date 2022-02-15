@@ -54,10 +54,12 @@ app.use("/api/widgets", widgetsRoutes(db));
 const logoutRouter = require("./routes/logout-router");
 const loginRouter = require("./routes/login-router");
 const registerRouter = require("./routes/register-router");
+const userSettingsRouter = require("./routes/user-settings-router");
 // tell express to use the routes as middleware
 app.use("/logout", logoutRouter(db));
 app.use("/login", loginRouter(db));
 app.use("/register", registerRouter(db));
+app.use("/user-settings", userSettingsRouter(db));
 
 // import the routers
 // tell express to use the routes as middleware
