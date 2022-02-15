@@ -94,11 +94,13 @@ const getSpecificResource = (db, resourceID) => {
 
 const getComments = (db, resourceID) => {
   const queryString = `
-    SELECT * FROM
-    resource_comments;`
+    SELECT resource_comments.*, users.name as user_name
+    FROM resource_comments
+    JOIN users ON user_id = users.id
+    WHERE resource_id = $1;`
 
   return db
-    .query(queryString)
+    .query(queryString, [resourceID])
     .then(res => res.rows)
     .catch(err => console.log("getComments: ", err.message));
 

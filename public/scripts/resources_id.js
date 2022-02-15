@@ -1,7 +1,10 @@
 $(() => {
-  const resource = JSON.parse(resourceData)
+  const resource = JSON.parse(resourceData);
+  const commentArray = JSON.parse(commentData);
 
-  const renderResource = (resource) => {
+  console.log(commentArray);
+
+  const renderResourceElement = (resource) => {
     const htmlContent = `
     <div id="resource-main">
       <header class="resource-head-foot">
@@ -17,18 +20,28 @@ $(() => {
         <p>${Math.round((Number(resource.rating) + Number.EPSILON) * 100) / 100} ⭐️</p>
         <p>${resource.likes} 👍</p>
       </footer>
-    </div>`
+    </div>`;
 
     $("body").prepend(htmlContent);
   };
 
-  const renderComments = (commentArray) => {
-
+  const createCommentElement = (comment) => {
+    return `
+    <article class="comment">
+      <p>${comment.comment}</p>
+      <p>Written ${timeago.format(comment.created_at)} by ${comment.username}</p>
+    </article>`;
   }
+
+  const renderComments = (commentArray) => {
+    for (const comment of commentArray) {
+      $("#comments").prepend(createCommentElement(comment));
+    }
+  };
 
   const loadComments = (allOrLast) => {
 
   }
 
-  renderResource(resource);
+  renderResourceElement(resource);
 })
