@@ -21,11 +21,11 @@ CREATE TABLE topics (
 CREATE TABLE resources (
   id SERIAL PRIMARY KEY NOT NULL,
   user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-  topic_id INTEGER REFERENCES topics(id) ON DELETE CASCADE,
+  topic VARCHAR(255) NOT NULL,
   url VARCHAR(255) NOT NULL,
   title VARCHAR(255) NOT NULL,
   description TEXT,
-  created_at TIMESTAMP
+  created_at BIGINT
 );
 
 CREATE TABLE user_likes (
