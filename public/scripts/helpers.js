@@ -77,6 +77,24 @@ const selectMyResources = (db, userID) => {
     .catch(err => console.log("selectMyResources: ", err.message));
 };
 
+const getSpecificResource = (db, resourceID) => {
+  const queryString = `
+  SELECT url, title, topic, description, created_at, users.name as creator, count(user_likes.*) as likes, avg(ratings.rating) as rating
+  FROM resources
+  JOIN users ON user_id = users.id
+  JOIN user_likes ON user_likes.resource_id = resources.id
+  JOIN ratings ON ratings.resource_id = resources.id
+  WHERE resources.id = 1$
+  GROUP BY resources.url, resources.title, resources.description, resources.topic, resources.created_at, users.name
+  ORDER BY rating, likes;
+  `
+
+  return db
+    .query(queryString, [resourceID])
+    .then(result => result.rows)
+    .catch(err => console.log("selectMyResources: ", err.message));
+}
+
 //Adds new user to the database
 const addUser = function(user, db) {
   const values = [`${user.name}`, `${user.email}`, `${user.password}`];
@@ -97,5 +115,6 @@ module.exports = {
   usernameLookup,
   updateUser,
   searchForResourceData,
-  selectMyResources
+  selectMyResources,
+  getSpecificResource
 };
