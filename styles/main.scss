@@ -52,3 +52,8 @@ article.resource {
 .show {
   display: block;
 }
+
+.new-comment-form {
+  display: flex;
+  flex-direction: row;
+}

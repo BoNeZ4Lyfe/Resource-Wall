@@ -24,8 +24,15 @@
     <%- include('partials/_header') %>
 
     <main>
+      <form action="/api/resource_comment" method="post" id="comment-create" class="new-comment-form hide">
+        <div class="new-comment-form">
+          <label for="new-comment">Comment</label>
+          <input type="text" name="comment" placeholder="comment" >
+        </div>
+      </form>
+
       <div>
-        <button class="btn btn--new">Add new</button>
+        <button class="btn btn--new show">Add new</button>
       </div>
 
       <form action="/api/resources" method="post" id="resource-create" class="new-resource-form hide">
@@ -64,7 +71,8 @@
         <button type="submit">Submit</button>
         </form>
 
-      <div class="resource-containter">
+
+      <div class="resource-containter show">
         <% for(const resource of locals.resources) { %>
         <article class="resource">
           <header>
@@ -84,7 +92,3 @@
   </body>
 </html>
 
-<!-- "topic_id":5,"url":"http://nature.com","title":"praesent","description":"In hac
-habitasse platea dictumst. Aliquam augue quam, sollicitudin vitae, consectetuer
-eget, rutrum at, lorem." -->
->>>>>>> master
