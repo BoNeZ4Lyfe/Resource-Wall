@@ -6,7 +6,7 @@ const getUsers = (db) => {
     FROM users;
     `)
     .then(users => users.rows)
-    .catch(err => console.log(err.message));
+    .catch(err => console.log("getUsers: ", err.message));
 };
 
 // checks user emails against target email and returns user object if email exists in database
@@ -36,10 +36,10 @@ const updateUser = (db, property, id, update) => {
     SET ${property} = $1
     WHERE id = ${id};
     `, [update])
-    .catch(err => console.log(err.message));
+    .catch(err => console.log("updateUser: ", err.message));
 };
 
-const searchDatabase = (db, search) => {
+const searchForResourceData = (db, search) => {
   const queryString = `
   SELECT url, title, description, created_at, users.name as creator, count(user_likes.*) as likes, avg(ratings.rating) as rating
   FROM resources
@@ -56,7 +56,7 @@ const searchDatabase = (db, search) => {
   return db
     .query(queryString, values)
     .then(result => result.rows)
-    .catch(err => console.log(err.message));
+    .catch(err => console.log("SearchForResourceData: ", err.message));
 };
 
 //Adds new user to the database
@@ -78,5 +78,5 @@ module.exports = {
   userEmailLookup,
   usernameLookup,
   updateUser,
-  searchDatabase
+  searchForResourceData
 };
