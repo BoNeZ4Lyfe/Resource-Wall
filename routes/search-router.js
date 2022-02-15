@@ -8,21 +8,23 @@ module.exports = (db) => {
     const results = [];
 
     searchDatabase(db, search)
-      .then(res => {
-        for (const result of res) {
+      .then(query => {
+        for (const result of query) {
           results.push(result);
         }
+
+        const templateVars = {
+          result: results,
+          loggedIn: req.session.loggedIn,
+          userID: req.session.userID,
+          username: req.session.username,
+          query: search
+        };
+
+        res.render("search", templateVars);
       })
       .catch(err => console.log(err.message));
 
-    const templateVars = {
-      results: results,
-      loggedIn: req.session.loggedIn,
-      userID: req.session.userID,
-      username: req.session.username,
-      query: search
-    };
-    res.render("search", templateVars);
   });
 
   return router;

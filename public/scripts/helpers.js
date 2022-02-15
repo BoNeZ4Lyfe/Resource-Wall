@@ -41,7 +41,7 @@ const updateUser = (db, property, id, update) => {
 
 const searchDatabase = (db, search) => {
   const queryString = `
-  SELECT url, title, description, created_at, users.name, count(user_likes.*) as likes, avg(ratings.rating) as rating
+  SELECT url, title, description, created_at, users.name as creator, count(user_likes.*) as likes, avg(ratings.rating) as rating
   FROM resources
   JOIN users ON user_id = users.id
   JOIN user_likes ON user_likes.resource_id = resources.id
