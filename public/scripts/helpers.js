@@ -77,13 +77,13 @@ const selectMyResources = (db, userID) => {
 
 const getSpecificResource = (db, resourceID) => {
   const queryString = `
-    SELECT url, title, topic, description, created_at, users.name as creator, count(user_likes.*) as likes, avg(ratings.rating) as rating
+    SELECT url, title, topic, description, created_at, users.name as creator, count(user_likes.*) as likes, avg(ratings.rating) as rating, resources.id, resources.user_id
     FROM resources
     JOIN users ON user_id = users.id
     JOIN user_likes ON user_likes.resource_id = resources.id
     JOIN ratings ON ratings.resource_id = resources.id
     WHERE resources.id = $1
-    GROUP BY resources.url, resources.title, resources.description, resources.topic, resources.created_at, users.name
+    GROUP BY resources.url, resources.title, resources.description, resources.topic, resources.created_at, users.name, resources.id, users.id
     ORDER BY rating, likes;`
 
   return db
@@ -128,7 +128,6 @@ const rateResource = (db, resourceID, userID) => {
     .query(queryString)
     .then(res => res.rows[0])
     .catch(err => console.log("rateResource: ", err.message));
-
 };
 
 //Adds new user to the database
@@ -153,5 +152,7 @@ module.exports = {
   searchForResourceData,
   selectMyResources,
   getSpecificResource,
-  getComments
+  getComments,
+  likeResource,
+  rateResource
 };

@@ -1,5 +1,5 @@
 const express = require("express");
-const { getSpecificResource, getComments } = require("../public/scripts/helpers");
+const { getSpecificResource, getComments, likeResource, rateResource } = require("../public/scripts/helpers");
 const router = express.Router();
 
 module.exports = (db) => {
@@ -44,9 +44,11 @@ module.exports = (db) => {
         res.render("resources_id", templateVars);
       })
       .catch(err => console.log(`GET resources/${req.params.id}: `, err.message));
+  });
 
-
-  })
+  router.post("/:id", (req, res) => {
+    console.log(req.body);
+  });
 
   return router;
 };

@@ -2,6 +2,11 @@ $(() => {
   const resource = JSON.parse(resourceData);
   const comments = JSON.parse(commentData);
 
+  $("#post").on("click", () => {
+    $.post(`/resources/:id`, { resource: resource.id, user: resource.user_id })
+      .done(() => {});
+  });
+
   const renderResourceElement = (resource) => {
     const htmlContent = `
     <div id="resource-main">
