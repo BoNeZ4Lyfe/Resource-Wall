@@ -1,8 +1,6 @@
 $(() => {
   const resource = JSON.parse(resourceData);
-  const commentArray = JSON.parse(commentData);
-
-  console.log(commentArray);
+  const comments = JSON.parse(commentData);
 
   const renderResourceElement = (resource) => {
     const htmlContent = `
@@ -29,7 +27,7 @@ $(() => {
     return `
     <article class="comment">
       <p>${comment.comment}</p>
-      <p>Written ${timeago.format(comment.created_at)} by ${comment.username}</p>
+      <p>Written ${timeago.format(comment.created_at)} by ${comment.user_name}</p>
     </article>`;
   }
 
@@ -40,8 +38,16 @@ $(() => {
   };
 
   const loadComments = (allOrLast) => {
+    if (allOrLast === "all") {
+      renderComments(comments);
+    }
+
+    if (allOrLast === "last") {
+      renderComments(comments[comments.length-1]);
+    }
 
   }
 
+  loadComments("all");
   renderResourceElement(resource);
-})
+});
