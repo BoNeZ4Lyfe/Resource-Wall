@@ -1,5 +1,8 @@
 const express = require("express");
-const { render } = require("express/lib/response");
+const {
+  getSpecificResource,
+  getComments,
+} = require("../public/scripts/helpers");
 const router = express.Router();
 
 module.exports = (db) => {
@@ -42,6 +45,26 @@ module.exports = (db) => {
     db.query(query, values).then((res) => {
       //redirect to the user page with individual resource
     });
+  });
+  router.get("/:id", (req, res) => {
+    const templateVars = {
+      loggedIn: req.session.loggedIn,
+      userID: req.session.userID,
+      username: req.session.username,
+      resource: null,
+      comments: null,
+    };
+
+    getSpecificResource(db, req.params.id)
+      .then((resource) => (templateVars.resource = resource))
+      .then(() => getComments(db, req.params.id))
+      .then((comments) => {
+        templateVars.comments = comments;
+        res.render("resources_id", templateVars);
+      })
+      .catch((err) =>
+        console.log(`GET resources/${req.params.id}: `, err.message)
+      );
   });
 
   return router;

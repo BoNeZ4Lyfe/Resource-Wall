@@ -1,5 +1,6 @@
 body {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
@@ -58,19 +59,18 @@ article.resource {
   width: 40%;
 }
 
-div header {
-  margin: 1rem;
-}
-
 .resource-content {
   margin: 1rem;
+  width: 90%;
+  word-wrap: break-word;
 }
 
-div footer {
+.resource-head-foot {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin: 1rem;
+  margin: 0 1rem;
+  width: 90%;
 }
 
 .hide {
@@ -81,8 +81,33 @@ div footer {
   display: block;
 }
 
-// Commented out right now as need to hide the form
-// .new-comment-form {
-//   display: flex;
-//   flex-direction: row;
-// }
+
+.new-comment-form {
+  display: flex;
+  flex-direction: row;
+}
+
+#resource-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  margin: 7rem 7rem 2rem;
+  width: 60%;
+  border: 3px solid blue;
+}
+
+#comments {
+  width: 60%;
+}
+
+.comment {
+  border: 3px solid blue;
+  margin-bottom: 1rem;
+}
+
+.main-text {
+  border-bottom: 2px solid blue;
+  padding-bottom: 1rem;
+}
+>>>>>>> master

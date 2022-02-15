@@ -41,15 +41,14 @@ const updateUser = (db, property, id, update) => {
 
 const searchForResourceData = (db, search) => {
   const queryString = `
-  SELECT url, title, topic, description, created_at, users.name as creator, count(user_likes.*) as likes, avg(ratings.rating) as rating
-  FROM resources
-  JOIN users ON user_id = users.id
-  JOIN user_likes ON user_likes.resource_id = resources.id
-  JOIN ratings ON ratings.resource_id = resources.id
-  WHERE title LIKE ('%' || $1 || '%') OR description LIKE ('%' || $1 || '%') OR topic LIKE ('%' || $1 || '%')
-  GROUP BY resources.url, resources.title, resources.description, resources.topic, resources.created_at, users.name
-  ORDER BY rating, likes;
-  `
+    SELECT url, title, topic, description, created_at, users.name as creator, count(user_likes.*) as likes, avg(ratings.rating) as rating
+    FROM resources
+    JOIN users ON user_id = users.id
+    JOIN user_likes ON user_likes.resource_id = resources.id
+    JOIN ratings ON ratings.resource_id = resources.id
+    WHERE title LIKE ('%' || $1 || '%') OR description LIKE ('%' || $1 || '%') OR topic LIKE ('%' || $1 || '%')
+    GROUP BY resources.url, resources.title, resources.description, resources.topic, resources.created_at, users.name
+    ORDER BY rating, likes;`
 
   const values = [search];
 
@@ -61,20 +60,50 @@ const searchForResourceData = (db, search) => {
 
 const selectMyResources = (db, userID) => {
   const queryString = `
-  SELECT url, title, topic, description, created_at, users.name as creator, count(user_likes.*) as likes, avg(ratings.rating) as rating
-  FROM resources
-  JOIN users ON user_id = users.id
-  JOIN user_likes ON user_likes.resource_id = resources.id
-  JOIN ratings ON ratings.resource_id = resources.id
-  WHERE users.id = ${userID} OR user_likes.user_id = ${userID}
-  GROUP BY resources.url, resources.title, resources.description, resources.topic, resources.created_at, users.name
-  ORDER BY rating, likes;
-  `
+    SELECT url, title, topic, description, created_at, users.name as creator, count(user_likes.*) as likes, avg(ratings.rating) as rating
+    FROM resources
+    JOIN users ON user_id = users.id
+    JOIN user_likes ON user_likes.resource_id = resources.id
+    JOIN ratings ON ratings.resource_id = resources.id
+    WHERE users.id = ${userID} OR user_likes.user_id = ${userID}
+    GROUP BY resources.url, resources.title, resources.description, resources.topic, resources.created_at, users.name
+    ORDER BY rating, likes;`
 
   return db
     .query(queryString)
     .then(result => result.rows)
     .catch(err => console.log("selectMyResources: ", err.message));
+};
+
+const getSpecificResource = (db, resourceID) => {
+  const queryString = `
+    SELECT url, title, topic, description, created_at, users.name as creator, count(user_likes.*) as likes, avg(ratings.rating) as rating
+    FROM resources
+    JOIN users ON user_id = users.id
+    JOIN user_likes ON user_likes.resource_id = resources.id
+    JOIN ratings ON ratings.resource_id = resources.id
+    WHERE resources.id = $1
+    GROUP BY resources.url, resources.title, resources.description, resources.topic, resources.created_at, users.name
+    ORDER BY rating, likes;`
+
+  return db
+    .query(queryString, [resourceID])
+    .then(result => result.rows[0])
+    .catch(err => console.log("getSpecificResources: ", err.message));
+};
+
+const getComments = (db, resourceID) => {
+  const queryString = `
+    SELECT resource_comments.*, users.name as user_name
+    FROM resource_comments
+    JOIN users ON user_id = users.id
+    WHERE resource_id = $1;`
+
+  return db
+    .query(queryString, [resourceID])
+    .then(res => res.rows)
+    .catch(err => console.log("getComments: ", err.message));
+
 };
 
 //Adds new user to the database
@@ -97,5 +126,7 @@ module.exports = {
   usernameLookup,
   updateUser,
   searchForResourceData,
-  selectMyResources
+  selectMyResources,
+  getSpecificResource,
+  getComments
 };
