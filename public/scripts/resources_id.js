@@ -15,12 +15,20 @@ $(() => {
       </div>
       <footer class="resource-head-foot">
         <p>${Math.round((Number(resource.rating) + Number.EPSILON) * 100) / 100} ⭐️</p>
-        <a>${resource.likes} 👍</a>
+        <p>${resource.likes} 👍</p>
       </footer>
     </div>`
 
-    $("body").append(htmlContent);
+    $("body").prepend(htmlContent);
   };
+
+  const renderComments = (commentArray) => {
+
+  }
+
+  const loadComments = (allOrLast) => {
+
+  }
 
   renderResource(resource);
 })
