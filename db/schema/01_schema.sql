@@ -1,5 +1,4 @@
 DROP TABLE IF EXISTS users CASCADE;
-DROP TABLE IF EXISTS topics CASCADE;
 DROP TABLE IF EXISTS resources CASCADE;
 DROP TABLE IF EXISTS user_likes CASCADE;
 DROP TABLE IF EXISTS resource_comments CASCADE;
@@ -20,14 +19,13 @@ CREATE TABLE resources (
   url VARCHAR(255) NOT NULL,
   title VARCHAR(255) NOT NULL,
   description TEXT,
-  created_at BIGINT
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE user_likes (
   id SERIAL PRIMARY KEY NOT NULL,
   resource_id INTEGER REFERENCES resources(id) ON DELETE CASCADE,
-  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-  liked_at TIMESTAMP
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE resource_comments (
@@ -35,7 +33,7 @@ CREATE TABLE resource_comments (
   resource_id INTEGER REFERENCES resources(id) ON DELETE CASCADE,
   user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
   comment TEXT,
-  created_at TIMESTAMP
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 
