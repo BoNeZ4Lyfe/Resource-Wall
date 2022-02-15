@@ -11,33 +11,17 @@
 
   <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
   <script type="text/javascript" src="/scripts/app.js"></script>
+  <script>
+    const searchResults = '<%- JSON.stringify(result) %>'
+  </script>
+</head>
 
 <body>
   <%- include('partials/_header') %>
 
-    <h3>You searched for <%= query %>
-    </h3>
+    <h3>You searched for <%= query %></h3>
     <p>Your search returned <%= result.length %> results!</p>
-    <% if (result) { %>
-      <% for (const resource of result) { %>
-        <div>
-          <h4>
-            <%= resource.title %>
-          </h4>
-          <p>
-            <%= resource.url %>
-          </p>
-          <p>
-            <%= resource.description %>
-          </p>
-          <p>Created By: <%= resource.creator %>, on <%= resource.created_at %>
-          </p>
-          <p>
-            <%= resource.likes %> likes Rating: <%= resource.rating %>
-          </p>
-        </div>
-        <% } %>
-          <% } %>
+
 </body>
 
 </html>
