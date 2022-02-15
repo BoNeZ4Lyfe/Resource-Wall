@@ -9,10 +9,12 @@ const cookieSession = require("cookie-session");
 const app = express();
 const morgan = require("morgan");
 
-app.use(cookieSession({
-  name: 'session',
-  keys: ['key1']
-}));
+app.use(
+  cookieSession({
+    name: "session",
+    keys: ["key1"],
+  })
+);
 
 // PG database client/connection setup
 const { Pool } = require("pg");
@@ -70,7 +72,7 @@ app.get("/", (req, res) => {
   const templateVars = {
     loggedIn: req.session.loggedIn,
     userID: req.session.userID,
-    username: req.session.username
+    username: req.session.username,
   };
   res.render("index", templateVars);
 });
