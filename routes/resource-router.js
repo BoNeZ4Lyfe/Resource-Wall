@@ -1,12 +1,5 @@
 const express = require("express");
-<<<<<<< HEAD
-const {
-  getSpecificResource,
-  getComments,
-} = require("../public/scripts/helpers");
-=======
 const { getSpecificResource, getComments, likeResource, rateResource } = require("../public/scripts/helpers");
->>>>>>> feature/like-rate
 const router = express.Router();
 
 module.exports = (db) => {
