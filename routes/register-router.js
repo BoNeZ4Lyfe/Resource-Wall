@@ -19,17 +19,14 @@ module.exports = (db) => {
 
   router.post("/", (req, res) => {
     const user = req.body;
-    const password = req.body.password;
-
-    if (user.password === password) {
-      addUser(user, db);
-      req.session.loggedIn = true;
-      req.session.userID = user.id;
-      req.session.username = user.name;
-      res.redirect("/");
-    } else {
-      return res.status(403).send("Incorrect password.");
-    }
+    addUser(user, db)
+      .then(user => {
+        req.session.loggedIn = true;
+        req.session.userID = user.id;
+        req.session.username = user.name;
+        res.redirect("/");
+      })
+      .catch(err => err.message);
   });
   return router;
 };

@@ -6,7 +6,7 @@ const getUsers = (db) => {
     FROM users;
     `)
     .then(users => users.rows)
-    .catch(err => console.log(err.message));
+    .catch(err => console.log("getUsers: ", err.message));
 };
 
 // checks user emails against target email and returns user object if email exists in database
@@ -36,9 +36,46 @@ const updateUser = (db, property, id, update) => {
     SET ${property} = $1
     WHERE id = ${id};
     `, [update])
-    .catch(err => console.log(err.message));
+    .catch(err => console.log("updateUser: ", err.message));
 };
 
+const searchForResourceData = (db, search) => {
+  const queryString = `
+  SELECT url, title, topic, description, created_at, users.name as creator, count(user_likes.*) as likes, avg(ratings.rating) as rating
+  FROM resources
+  JOIN users ON user_id = users.id
+  JOIN user_likes ON user_likes.resource_id = resources.id
+  JOIN ratings ON ratings.resource_id = resources.id
+  WHERE title LIKE ('%' || $1 || '%') OR description LIKE ('%' || $1 || '%') OR topic LIKE ('%' || $1 || '%')
+  GROUP BY resources.url, resources.title, resources.description, resources.topic, resources.created_at, users.name
+  ORDER BY rating, likes;
+  `
+
+  const values = [search];
+
+  return db
+    .query(queryString, values)
+    .then(result => result.rows)
+    .catch(err => console.log("SearchForResourceData: ", err.message));
+};
+
+const selectMyResources = (db, userID) => {
+  const queryString = `
+  SELECT url, title, topic, description, created_at, users.name as creator, count(user_likes.*) as likes, avg(ratings.rating) as rating
+  FROM resources
+  JOIN users ON user_id = users.id
+  JOIN user_likes ON user_likes.resource_id = resources.id
+  JOIN ratings ON ratings.resource_id = resources.id
+  WHERE users.id = ${userID} OR user_likes.user_id = ${userID}
+  GROUP BY resources.url, resources.title, resources.description, resources.topic, resources.created_at, users.name
+  ORDER BY rating, likes;
+  `
+
+  return db
+    .query(queryString)
+    .then(result => result.rows)
+    .catch(err => console.log("selectMyResources: ", err.message));
+};
 
 //Adds new user to the database
 const addUser = function(user, db) {
@@ -58,5 +95,7 @@ module.exports = {
   getUsers,
   userEmailLookup,
   usernameLookup,
-  updateUser
+  updateUser,
+  searchForResourceData,
+  selectMyResources
 };
