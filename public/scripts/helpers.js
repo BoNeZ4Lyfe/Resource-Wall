@@ -77,13 +77,13 @@ const selectMyResources = (db, userID) => {
 
 const getSpecificResource = (db, resourceID) => {
   const queryString = `
-    SELECT url, title, topic, description, created_at, users.name as creator, count(user_likes.*) as likes, avg(ratings.rating) as rating
+    SELECT url, title, topic, description, created_at, users.name as creator, avg(ratings.rating) as rating, resources.id, resources.user_id, (SELECT count(*) as likes FROM user_likes WHERE resource_id = $1)
     FROM resources
     JOIN users ON user_id = users.id
     JOIN user_likes ON user_likes.resource_id = resources.id
     JOIN ratings ON ratings.resource_id = resources.id
     WHERE resources.id = $1
-    GROUP BY resources.url, resources.title, resources.description, resources.topic, resources.created_at, users.name
+    GROUP BY resources.url, resources.title, resources.description, resources.topic, resources.created_at, users.name, resources.id, users.id
     ORDER BY rating, likes;`
 
   return db
@@ -106,8 +106,32 @@ const getComments = (db, resourceID) => {
 
 };
 
+const likeResource = (db, resourceID, userID) => {
+  const queryString = `
+    INSERT INTO user_likes (resource_id, user_id)
+    VALUES (${resourceID}, ${userID})
+    RETURNING *;`
+
+  return db
+    .query(queryString)
+    .then(res => res.rows[0])
+    .catch(err => console.log("likeResource: ", err.message));
+};
+
+const rateResource = (db, resourceID, userID, rating) => {
+  const queryString = `
+    INSERT INTO ratings (resource_id, user_id, rating)
+    VALUES (${resourceID}, ${userID}, $1)
+    RETURNING *;`
+
+  return db
+    .query(queryString, [rating])
+    .then(res => res.rows[0])
+    .catch(err => console.log("rateResource: ", err.message));
+};
+
 //Adds new user to the database
-const addUser = function(user, db) {
+const addUser = function (user, db) {
   const values = [`${user.name}`, `${user.email}`, `${user.password}`];
   const queryStr = `INSERT INTO users (name, email, password)
   VALUES ($1, $2, $3) RETURNING *;`;
@@ -128,5 +152,7 @@ module.exports = {
   searchForResourceData,
   selectMyResources,
   getSpecificResource,
-  getComments
+  getComments,
+  likeResource,
+  rateResource
 };
