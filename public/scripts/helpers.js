@@ -84,14 +84,14 @@ const getSpecificResource = (db, resourceID) => {
   JOIN users ON user_id = users.id
   JOIN user_likes ON user_likes.resource_id = resources.id
   JOIN ratings ON ratings.resource_id = resources.id
-  WHERE resources.id = 1$
+  WHERE resources.id = $1
   GROUP BY resources.url, resources.title, resources.description, resources.topic, resources.created_at, users.name
   ORDER BY rating, likes;
   `
 
   return db
     .query(queryString, [resourceID])
-    .then(result => result.rows)
+    .then(result => result.rows[0])
     .catch(err => console.log("selectMyResources: ", err.message));
 }
 

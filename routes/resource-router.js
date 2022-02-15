@@ -1,5 +1,5 @@
 const express = require("express");
-const { render } = require("express/lib/response");
+const { getSpecificResource } = require("../public/scripts/helpers");
 const router = express.Router();
 
 // GET / resources
@@ -47,5 +47,23 @@ module.exports = (db) => {
         res.status(500).json({ error: err.message });
       });
   });
+
+  router.get("/:id", (req, res) => {
+
+    getSpecificResource(db, req.params.id)
+      .then(resource => {
+        const templateVars = {
+          loggedIn: req.session.loggedIn,
+          userID: req.session.userID,
+          username: req.session.username,
+          resource: resource
+        };
+        res.render("resources_id", templateVars);
+      })
+      .catch(err => console.log(`GET resources/${req.params.id}: `, err.message));
+
+
+  })
+
   return router;
 };

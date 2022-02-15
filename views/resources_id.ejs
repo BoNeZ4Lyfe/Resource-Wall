@@ -15,6 +15,11 @@
   <body>
     <%- include('partials/_header') %>
 
-    <h1>WELCOME TO THE HOMEPAGE!!!🥔</h1>
+    <div class="resource-main">
+      <header>
+        <h4><%= resource.title %></h4>
+        <a href="<%= resource.url %>"><%= resource.url %></a>
+      </header>
+    </div>
   </body>
 </html>
