@@ -58,19 +58,16 @@ article.resource {
   width: 40%;
 }
 
-div header {
-  margin: 1rem;
-}
-
 .resource-content {
   margin: 1rem;
 }
 
-div footer {
+.resource-head-foot {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin: 1rem;
+  margin: 0 1rem;
+  width: 90%;
 }
 
 .hide {
@@ -86,8 +83,12 @@ div footer {
   flex-direction: row;
 }
 
-.resource-main {
+#resource-main {
   display: flex;
   flex-direction: column;
-
+  align-items: center;
+  justify-content: space-evenly;
+  margin: 7rem;
+  width: 60%;
+  border: 3px solid blue;
 }
