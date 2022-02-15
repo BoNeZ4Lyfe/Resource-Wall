@@ -106,8 +106,33 @@ const getComments = (db, resourceID) => {
 
 };
 
+const likeResource = (db, resourceID, userID) => {
+  const queryString = `
+    INSERT INTO user_likes (resource_id, user_id)
+    VALUES (${resourceID}, ${userID})
+    RETURNING *;`
+
+  return db
+    .query(queryString)
+    .then(res => res.rows[0])
+    .catch(err => console.log("likeResource: ", err.message));
+};
+
+const rateResource = (db, resourceID, userID) => {
+  const queryString = `
+    INSERT INTO ratings (resource_id, user_id, rating)
+    VALUES (${resourceID}, ${userID}, $1)
+    RETURNING *;`
+
+  return db
+    .query(queryString)
+    .then(res => res.rows[0])
+    .catch(err => console.log("rateResource: ", err.message));
+
+};
+
 //Adds new user to the database
-const addUser = function(user, db) {
+const addUser = function (user, db) {
   const values = [`${user.name}`, `${user.email}`, `${user.password}`];
   const queryStr = `INSERT INTO users (name, email, password)
   VALUES ($1, $2, $3) RETURNING *;`;
