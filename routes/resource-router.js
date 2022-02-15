@@ -59,7 +59,6 @@ module.exports = (db) => {
         .then(res => console.log("Resource liked: ", res))
         .catch(err => console.log("likeResource: ", err.message));
     }
-
   });
 
   return router;

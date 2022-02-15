@@ -77,7 +77,7 @@ const selectMyResources = (db, userID) => {
 
 const getSpecificResource = (db, resourceID) => {
   const queryString = `
-    SELECT url, title, topic, description, created_at, users.name as creator, count(user_likes.*) as likes, avg(ratings.rating) as rating, resources.id, resources.user_id
+    SELECT url, title, topic, description, created_at, users.name as creator, avg(ratings.rating) as rating, resources.id, resources.user_id, (SELECT count(*) as likes FROM user_likes WHERE resource_id = $1)
     FROM resources
     JOIN users ON user_id = users.id
     JOIN user_likes ON user_likes.resource_id = resources.id
