@@ -58,6 +58,7 @@ const loginRouter = require("./routes/login-router");
 const registerRouter = require("./routes/register-router");
 const userSettingsRouter = require("./routes/user-settings-router");
 const searchRouter = require("./routes/search-router");
+const resourceRoutes = require("./routes/resource-router");
 
 // tell express to use the routes as middleware
 app.use("/logout", logoutRouter(db));
@@ -65,6 +66,7 @@ app.use("/login", loginRouter(db));
 app.use("/register", registerRouter(db));
 app.use("/user-settings", userSettingsRouter(db));
 app.use("/search", searchRouter(db));
+app.use("/resources", resourceRoutes(db));
 
 // import the routers
 // tell express to use the routes as middleware
@@ -79,10 +81,6 @@ app.get("/", (req, res) => {
   };
   res.render("index", templateVars);
 });
-
-// Get a list of resources
-const resourceRoutes = require("./routes/resource-router");
-app.use("/resources", resourceRoutes(db));
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);
