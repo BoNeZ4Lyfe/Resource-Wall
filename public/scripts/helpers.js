@@ -41,13 +41,13 @@ const updateUser = (db, property, id, update) => {
 
 const searchForResourceData = (db, search) => {
   const queryString = `
-  SELECT url, title, description, created_at, users.name as creator, count(user_likes.*) as likes, avg(ratings.rating) as rating
+  SELECT url, title, topic, description, created_at, users.name as creator, count(user_likes.*) as likes, avg(ratings.rating) as rating
   FROM resources
   JOIN users ON user_id = users.id
   JOIN user_likes ON user_likes.resource_id = resources.id
   JOIN ratings ON ratings.resource_id = resources.id
-  WHERE title LIKE ('%' || $1 || '%') OR description LIKE ('%' || $1 || '%')
-  GROUP BY resources.url, resources.title, resources.description, resources.created_at, users.name
+  WHERE title LIKE ('%' || $1 || '%') OR description LIKE ('%' || $1 || '%') OR topic LIKE ('%' || $1 || '%')
+  GROUP BY resources.url, resources.title, resources.description, resources.topic, resources.created_at, users.name
   ORDER BY rating, likes;
   `
 
@@ -57,6 +57,24 @@ const searchForResourceData = (db, search) => {
     .query(queryString, values)
     .then(result => result.rows)
     .catch(err => console.log("SearchForResourceData: ", err.message));
+};
+
+const selectMyResources = (db, userID) => {
+  const queryString = `
+  SELECT url, title, topic, description, created_at, users.name as creator, count(user_likes.*) as likes, avg(ratings.rating) as rating
+  FROM resources
+  JOIN users ON user_id = users.id
+  JOIN user_likes ON user_likes.resource_id = resources.id
+  JOIN ratings ON ratings.resource_id = resources.id
+  WHERE users.id = ${userID} OR user_likes.user_id = ${userID}
+  GROUP BY resources.url, resources.title, resources.description, resources.topic, resources.created_at, users.name
+  ORDER BY rating, likes;
+  `
+
+  return db
+    .query(queryString)
+    .then(result => result.rows)
+    .catch(err => console.log("selectMyResources: ", err.message));
 };
 
 //Adds new user to the database
@@ -78,5 +96,6 @@ module.exports = {
   userEmailLookup,
   usernameLookup,
   updateUser,
-  searchForResourceData
+  searchForResourceData,
+  selectMyResources
 };

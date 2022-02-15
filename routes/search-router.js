@@ -1,13 +1,15 @@
 const express = require("express");
-const { searchDatabase } = require("../public/scripts/helpers");
+const { searchForResourceData } = require("../public/scripts/helpers");
 const router = express.Router();
+
+// ideally this will be moved to resource-router at some point today
 
 module.exports = (db) => {
   router.get("/", (req, res) => {
     const search = req.query.search;
     const results = [];
 
-    searchDatabase(db, search)
+    searchForResourceData(db, search)
       .then(query => {
         for (const result of query) {
           results.push(result);
