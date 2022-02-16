@@ -1,32 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>Resource</title>
 
-    <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
-    <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
-    <link rel="stylesheet" href="/styles/main.css" type="text/css" />
-    <link rel="stylesheet" href="/styles/layout.css" type="text/css" />
+<head>
+  <title>Resource</title>
 
-    <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
-    <script type="text/javascript" src="/scripts/resources_id.js"></script>
-    <script type="text/javascript" src="/scripts/rating-tool.js"></script>
+  <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
+  <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
+  <link rel="stylesheet" href="/styles/main.css" type="text/css" />
+  <link rel="stylesheet" href="/styles/layout.css" type="text/css" />
 
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/timeago.js/4.0.2/timeago.min.js"
-      integrity="sha512-SVDh1zH5N9ChofSlNAK43lcNS7lWze6DTVx1JCXH1Tmno+0/1jMpdbR8YDgDUfcUrPp1xyE53G42GFrcM0CMVg=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer">
+  <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
+  <script type="text/javascript" src="/scripts/resources_id.js"></script>
+  <script type="text/javascript" src="/scripts/rating-tool.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/timeago.js/4.0.2/timeago.min.js"
+    integrity="sha512-SVDh1zH5N9ChofSlNAK43lcNS7lWze6DTVx1JCXH1Tmno+0/1jMpdbR8YDgDUfcUrPp1xyE53G42GFrcM0CMVg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer">
     </script>
-    <script>
-      const resourceData = '<%- JSON.stringify(resource) %>';
-      const commentsData = '<%- JSON.stringify(comments) %>';
-    </script>
-  </head>
+  <script>
+    const resourceData = '<%- JSON.stringify(resource) %>';
+    const commentsData = '<%- JSON.stringify(comments) %>';
+  </script>
+</head>
 
-  <body>
-    <%- include('partials/_header') %>
+<body>
+  <%- include('partials/_header') %>
+    <main id="resource-main">
 
-    <section id="comments"><%# comments will be output here %></section>
-  </body>
+      <header class="resource-head-foot">
+        <h4><%= resource.title %></h4>
+        <h4><%= resource.topic %></h4>
+      </header>
+      <div class="resource-content">
+        <a href="<%= resource.url %>"><%= resource.url %></a>
+        <p class="main-text"><%= resource.description %></p>
+        <p>Created <a id="timeago"> <%= resource.created_at %></a> by <%= resource.creator %></p>
+      </div>
+      <footer class="resource-head-foot">
+        <button id="rate"><%= Math.round((Number(resource.rating) + Number.EPSILON) * 100) / 100 %> ⭐️</button>
+        <div class="hide" id="rating-tool">
+          <button class="rate-star" id="st1">1 ⭐️</button>
+          <button class="rate-star" id="st2">2 ⭐️</button>
+          <button class="rate-star" id="st3">3 ⭐️</button>
+          <button class="rate-star" id="st4">4 ⭐️</button>
+          <button class="rate-star" id="st5">5 ⭐️</button>
+        </div>
+        <button id="like"><%= resource.likes %> 👍</button>
+      </footer>
+
+    </main>
+
+    <section id="comments">
+      <%# comments will be output here %>
+    </section>
+</body>
+
 </html>
