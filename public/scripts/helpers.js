@@ -58,16 +58,6 @@ const searchForResourceData = (db, search) => {
 };
 
 const selectMyResources = (db, userID) => {
-  // const queryString = `
-  //   SELECT url, title, topic, description, created_at, users.name as creator, count(user_likes.*) as likes, avg(ratings.rating) as rating
-  //   FROM resources
-  //   JOIN users ON user_id = users.id
-  //   JOIN user_likes ON user_likes.resource_id = resources.id
-  //   JOIN ratings ON ratings.resource_id = resources.id
-  //   WHERE users.id = ${userID} OR user_likes.user_id = ${userID}
-  //   GROUP BY resources.url, resources.title, resources.description, resources.topic, resources.created_at, users.name
-  //   ORDER BY rating, likes;`
-
   const queryString = `
     SELECT DISTINCT resources.id, resources.title, resources.topic, resources.url, resources.description, users.name as creator, avg(ratings.rating) as rating, (SELECT count(*) FROM resource_comments WHERE resource_id = resources.id), (SELECT count(*) as likes FROM user_likes WHERE resource_id = resources.id)
     FROM resources

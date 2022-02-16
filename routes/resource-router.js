@@ -1,32 +1,34 @@
 const express = require("express");
-const { getSpecificResource, getComments, likeResource, rateResource, createResource } = require("../public/scripts/helpers");
 const router = express.Router();
+const {
+  getSpecificResource,
+  getComments,
+  likeResource, rateResource,
+  createResource,
+  selectMyResources
+} = require("../public/scripts/helpers");
 
 module.exports = (db) => {
   router.get("/", (req, res) => {
-    db.query(
-      `
-      SELECT resources.*, users.*, COUNT(resource_comments.id) AS count
-      FROM resources
-      JOIN users ON user_id = users.id
-      JOIN resource_comments ON resources.id = resource_id
-      GROUP BY resources.id, users.id
-    ;`
-    )
-      .then((data) => {
-        // console.log("DATA", data.rows);
+    const userID = req.session.userID;
+    const myResources = [];
+
+    selectMyResources(db, userID)
+      .then(resources => {
+        for (const resource of resources) {
+          myResources.push(resource);
+        }
+
         const templateVars = {
-          resources: data.rows,
+          resources: resources,
           loggedIn: req.session.loggedIn,
           userID: req.session.userID,
-          username: req.session.username,
+          username: req.session.username
         };
-        // res.json(data.rows); // Not API request anymore
-        res.render("resources", templateVars); // <---- new edit
+
+        res.render("resources", templateVars);
       })
-      .catch((err) => {
-        res.status(500).json({ error: err.message });
-      });
+      .catch(err => console.log("Resources GET: ", err.message));
   });
 
   router.post("/", (req, res) => {
