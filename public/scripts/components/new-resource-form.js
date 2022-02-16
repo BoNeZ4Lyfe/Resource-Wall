@@ -1,23 +1,22 @@
 $(() => {
   $(".btn--new").on("click", () => {
     const classesOnCreate = $("#resource-create").attr("class");
-    if (classesOnCreate.includes("hide")) {
-      $("#resource-create").toggle();
-    }
 
-    const classesOnComment = $("#comment-create").attr("class");
-    if (classesOnComment.includes("hide")) {
-      $("#comment-create").toggle();
+    if (classesOnCreate.includes("hide")) {
+      $("#resource-create").removeClass("hide");
+      $("#resource-create").addClass("show");
     }
 
     const classesOnBtn = $(".btn--new").attr("class");
     if (classesOnBtn.includes("show")) {
-      $(".btn--new").toggle();
+      $(".btn--new").removeClass("show");
+      $(".btn--new").addClass("hide");
     }
 
-    const classesOnResources = $(".resource-containter").attr("class");
-    if (classesOnResources.includes("show")) {
-      $(".resource-containter").toggle();
-    }
+    $(".resource-containter").toggle();
+    // if (classesOnResources.includes("show")) {
+    //   $(".resource-containter").removeClass("show");
+    //   $(".resource-containter").addClass("hide");
+    // }
   });
 });

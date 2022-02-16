@@ -1,5 +1,10 @@
 const express = require("express");
-const { getSpecificResource, getComments, likeResource, rateResource } = require("../public/scripts/helpers");
+const {
+  getSpecificResource,
+  getComments,
+  likeResource,
+  rateResource,
+} = require("../public/scripts/helpers");
 const router = express.Router();
 
 module.exports = (db) => {
@@ -39,9 +44,9 @@ module.exports = (db) => {
     `;
     const values = [resource_id, user_id, comment];
 
-    db.query(query, values).then((res) => {
-      console.log(res.body);
-    });
+    // db.query(query, values).then((res) => {
+    //   console.log(res.body);
+    // });
   });
 
   router.get("/:id", (req, res) => {
@@ -60,7 +65,9 @@ module.exports = (db) => {
         templateVars.comments = comments;
         res.render("resources_id", templateVars);
       })
-      .catch(err => console.log(`GET resources/${req.params.id}: `, err.message));
+      .catch((err) =>
+        console.log(`GET resources/${req.params.id}: `, err.message)
+      );
   });
 
   router.post("/:id", (req, res) => {
@@ -69,12 +76,12 @@ module.exports = (db) => {
 
     if (req.body.rating) {
       rateResource(db, resourceID, userID, req.body.rating)
-        .then(res => console.log("Resource rated: ", res))
-        .catch(err => console.log("rateResource: ", err.message));
+        .then((res) => console.log("Resource rated: ", res))
+        .catch((err) => console.log("rateResource: ", err.message));
     } else {
       likeResource(db, resourceID, userID)
-        .then(res => console.log("Resource liked: ", res))
-        .catch(err => console.log("likeResource: ", err.message));
+        .then((res) => console.log("Resource liked: ", res))
+        .catch((err) => console.log("likeResource: ", err.message));
     }
   });
 
