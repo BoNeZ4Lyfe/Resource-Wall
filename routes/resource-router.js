@@ -1,14 +1,5 @@
 const express = require("express");
-<<<<<<< HEAD
-const {
-  getSpecificResource,
-  getComments,
-  likeResource,
-  rateResource,
-} = require("../public/scripts/helpers");
-=======
 const { getSpecificResource, getComments, likeResource, rateResource, createResource } = require("../public/scripts/helpers");
->>>>>>> master
 const router = express.Router();
 
 module.exports = (db) => {
