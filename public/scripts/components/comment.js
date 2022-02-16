@@ -2,8 +2,6 @@ $(() => {
   const classesOnComment = $("#comment-create").attr("class");
   const classesOnBtn = $(".btn--new").attr("class");
   const classesOnResources = $(".resource-containter").attr("class");
-  const idOnResources = $(".resource-content").attr("id");
-  console.log(idOnResources);
 
   $(".btn--comment").on("click", (e) => {
     console.log(e);

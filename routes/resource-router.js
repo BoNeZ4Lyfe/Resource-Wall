@@ -60,9 +60,10 @@ module.exports = (db) => {
     const values = [resource_id, user_id, comment];
 
     db.query(query, values).then((res) => {
-      //redirect to the user page with individual resource
+      console.log(res.body);
     });
   });
+
   router.get("/:id", (req, res) => {
     const templateVars = {
       loggedIn: req.session.loggedIn,
