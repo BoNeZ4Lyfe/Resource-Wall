@@ -1,37 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>Resources</title>
 
-    <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
-    <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
-    <link rel="stylesheet" href="/styles/main.css" type="text/css" />
-    <link rel="stylesheet" href="/styles/layout.css" type="text/css" />
+<head>
+  <title>Resources</title>
 
-    <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
+  <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
+  <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
+  <link rel="stylesheet" href="/styles/main.css" type="text/css" />
+  <link rel="stylesheet" href="/styles/layout.css" type="text/css" />
 
-    <script
-      type="text/javascript"
-      src="/scripts/components/new-resource-form.js"
-    ></script>
-    <script
-      type="text/javascript"
-      src="/scripts/components/comment.js"
-    ></script>
-  </head>
+  <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
 
-  <body>
-    <%- include('partials/_header') %>
+  <script type="text/javascript" src="/scripts/components/new-resource-form.js"></script>
+  <script type="text/javascript" src="/scripts/components/comment.js"></script>
+</head>
+
+<body>
+  <%- include('partials/_header') %>
 
     <main>
       <form action="/resources/comment" method="post" id="comment-create" class="new-comment-form hide">
         <div class="new-comment-form">
           <label for="new-comment">Comment</label>
-          <textarea
-            name="text"
-            id="comment-text"
-            placeholder="Add some comments"
-          ></textarea>
+          <textarea name="text" id="comment-text" placeholder="Add some comments"></textarea>
         </div>
         <button type="submit">Submit</button>
       </form>
@@ -42,62 +33,81 @@
 
       <form action="/resources/new" method="post" id="resource-create" class="new-resource-form hide">
         <div class="new-resource-title">
-            <label for="new-resource-title">Title</label>
-            <input id="resource_title" type="text" name="title" placeholder="Title" >
+          <label for="new-resource-title">Title</label>
+          <input id="resource_title" type="text" name="title" placeholder="Title">
         </div>
 
         <div class="new-resource-url">
-            <label for="new-resource-url">URL</label>
-            <input id="resource_url" type="url" name="url" placeholder="URL" >
+          <label for="new-resource-url">URL</label>
+          <input id="resource_url" type="url" name="url" placeholder="URL">
         </div>
 
         <div class="new-resource-description">
-            <label for="new-property-form__description">Description</label>
-            <textarea id="resource_description" placeholder="Description" name="description" cols="30" rows="10"></textarea>
+          <label for="new-property-form__description">Description</label>
+          <textarea id="resource_description" placeholder="Description" name="description" cols="30"
+            rows="10"></textarea>
         </div>
 
         <label for="topic">Choose a topic:</label>
-          <select id="resource_topic" name="topic">
-            <optgroup label="Markup/Design">
-                <option value=""></option>
-                <option value="html">HTML</option>
-                <option value="css">CSS</option>
-                <option value="scss">SASS</option>
-            </optgroup>
-            <optgroup label="Languages">
-                <option value="javascript">JavaScript</option>
-                <option value="python">Python</option>
-                <option value="java">Java</option>
-                <option value="php">PHP</option>
-            </optgroup>
-            <option value="others">Others</option>
-          </select>
+        <select id="resource_topic" name="topic">
+          <optgroup label="Markup/Design">
+            <option value=""></option>
+            <option value="html">HTML</option>
+            <option value="css">CSS</option>
+            <option value="scss">SASS</option>
+          </optgroup>
+          <optgroup label="Languages">
+            <option value="javascript">JavaScript</option>
+            <option value="python">Python</option>
+            <option value="java">Java</option>
+            <option value="php">PHP</option>
+          </optgroup>
+          <option value="others">Others</option>
+        </select>
         </div>
         <button type="submit">Submit</button>
-        </form>
+      </form>
 
 
-      <div class="resource-containter show">
-        <% for(const resource of locals.resources) { %>
-        <article class="resource">
-          <header>
-            <div class="resource-title">
-              <span><%= resource.title %></span>
+      <div class="resource-container show">
+        <% for(const resource of resources) { %>
+          <article class="resource">
+            <header class="resource-head-foot">
+
+              <h4>
+                <%= resource.title %>
+              </h4>
+              <h4>
+                <%= resource.topic %>
+              </h4>
+
+            </header>
+            <div class="resource-content" id="<%= resource.id %>">
+              <a href="<%= resource.url %>">
+                <%= resource.url %>
+              </a>
+              <p>
+                <%= resource.description %>
+              </p>
+              <p>
+                <%= resource.count %> comments
+              </p>
             </div>
-            <span class="resource-url"><%= resource.url %></span>
-          </header>
-          <div class="resource-content" id="<%= resource.id %>" >
-            <p><%= resource.description %></p>
-            <p><%= resource.count %> comments</p>
-          </div>
-          <footer>
+            <footer class="resource-head-foot">
               <button class="btn btn--comment" id="<%= resource.id %>" type="submit">Add comment</button>
-            <p>LIKES</p>
-          </footer>
-        </article>
-        <% } %>
+              <div id="likes-rates">
+                <p>
+                  <%= Math.round((Number(resource.rating) + Number.EPSILON) * 100) / 100 %> ⭐️
+                </p>
+                <p>
+                  <%= resource.likes %> 👍
+                </p>
+              </div>
+            </footer>
+          </article>
+          <% } %>
       </div>
     </main>
-  </body>
-  </html>
+</body>
 
+</html>

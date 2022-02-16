@@ -59,7 +59,7 @@ const searchForResourceData = (db, search) => {
 
 const selectMyResources = (db, userID) => {
   const queryString = `
-    SELECT DISTINCT resources.id, resources.title, resources.topic, resources.url, resources.description, users.name as creator, avg(ratings.rating) as rating, (SELECT count(*) FROM resource_comments WHERE resource_id = resources.id), (SELECT count(*) as likes FROM user_likes WHERE resource_id = resources.id)
+    SELECT DISTINCT resources.id, resources.title, resources.topic, resources.url, resources.description, users.name as creator, avg(ratings.rating) as rating, (SELECT count(*) as count FROM resource_comments WHERE resource_id = resources.id), (SELECT count(*) as likes FROM user_likes WHERE resource_id = resources.id)
     FROM resources
     JOIN users ON users.id = resources.user_id
     JOIN ratings ON resources.id = ratings.resource_id

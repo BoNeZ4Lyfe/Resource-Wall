@@ -20,7 +20,7 @@ module.exports = (db) => {
         }
 
         const templateVars = {
-          resources: resources,
+          resources: myResources,
           loggedIn: req.session.loggedIn,
           userID: req.session.userID,
           username: req.session.username
