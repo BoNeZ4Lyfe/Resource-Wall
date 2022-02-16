@@ -71,6 +71,7 @@ module.exports = (db) => {
       .then(() => getComments(db, req.params.id))
       .then((comments) => {
         templateVars.comments = comments;
+        console.log(templateVars);
         res.render("resources_id", templateVars);
       })
       .catch(err => console.log(`GET resources/${req.params.id}: `, err.message));
@@ -85,10 +86,11 @@ module.exports = (db) => {
       rateResource(db, resourceID, rating)
         .then(res => console.log("Rating posted: ", res))
         .catch(err => console.log("rateResource: ", err.message));
-    } else {
-      likeResource(db, resourceID, userID)
-        .then(res => console.log("Like posted: ", res))
-        .catch(err => console.log("likeResource: ", err.message));
+    } else if (comment){
+
+    } else { likeResource(db, resourceID, userID)
+      .then(res => console.log("Like posted: ", res))
+      .catch(err => console.log("likeResource: ", err.message));
     }
   });
 

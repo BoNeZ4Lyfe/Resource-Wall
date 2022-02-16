@@ -41,14 +41,13 @@ const updateUser = (db, property, id, update) => {
 
 const searchForResourceData = (db, search) => {
   const queryString = `
-    SELECT url, title, topic, description, created_at, users.name as creator, count(user_likes.*) as likes, avg(ratings.rating) as rating
+    SELECT url, title, topic, description, resources.created_at, resources.id, users.name as creator, avg(ratings.rating) as rating, (SELECT count(*) as likes FROM user_likes WHERE resource_id = resources.id), (SELECT count(*) as count FROM resource_comments WHERE resource_id = resources.id)
     FROM resources
     JOIN users ON user_id = users.id
-    JOIN user_likes ON user_likes.resource_id = resources.id
     JOIN ratings ON ratings.resource_id = resources.id
     WHERE title LIKE ('%' || $1 || '%') OR description LIKE ('%' || $1 || '%') OR topic LIKE ('%' || $1 || '%')
-    GROUP BY resources.url, resources.title, resources.description, resources.topic, resources.created_at, users.name
-    ORDER BY rating, likes;`
+    GROUP BY resources.url, resources.title, resources.description, resources.topic, resources.created_at, resources.id, users.name
+    ORDER BY rating DESC, likes DESC;`
 
   const values = [search];
 

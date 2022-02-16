@@ -10,24 +10,55 @@
   <link rel="stylesheet" href="/styles/layout.css" type="text/css" />
 
   <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
-  <script type="text/javascript" src="/scripts/app.js"></script>
-  <script src="dist/timeago.js" type="text/javascript"></script>
-
-  <script>
-    const searchResults = '<%- JSON.stringify(result) %>'
-  </script>
+  <script type="text/javascript" src="/scripts/search.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/timeago.js/4.0.2/timeago.min.js"
+    integrity="sha512-SVDh1zH5N9ChofSlNAK43lcNS7lWze6DTVx1JCXH1Tmno+0/1jMpdbR8YDgDUfcUrPp1xyE53G42GFrcM0CMVg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer">
+    </script>
+  <script>const searchResults = '<%- JSON.stringify(result) %>';</script>
 </head>
 
 <body>
-  <%- include('partials/_header') %>
-  <div class="page-title">
-    <h3>You searched for <%= query %></h3>
-    <p>Your search returned <%= result.length %> results!</p>
-  </div>
   <main>
+    <%- include('partials/_header') %>
+      <div class="page-title">
+        <h3>You searched for <%= query %>
+        </h3>
+        <p>Your search returned <%= result.length %> results!</p>
+      </div>
+      <div class="resource-containter">
+        <% for (const resource of result) { %>
+          <article class="resource">
+            <header class="resource-head-foot">
 
+                <h4>
+                  <%= resource.title %>
+                </h4>
+                <h4><%= resource.topic %></h4>
+
+            </header>
+            <div class="resource-content" id="<%= resource.id %>">
+              <a href="<%= resource.url %>">
+                <%= resource.url %>
+              </a>
+              <p>
+                <%= resource.description %>
+              </p>
+              <p>
+                <%= resource.count %> comments
+              </p>
+            </div>
+            <footer class="resource-head-foot">
+              <button class="btn btn--comment" name="<%= resource.id %>" type="submit">Add comment</button>
+              <div id="likes-rates">
+                <p><%= Math.round((Number(resource.rating) + Number.EPSILON) * 100) / 100 %> ⭐️</p>
+                <p><%= resource.likes %> 👍</p>
+              </div>
+            </footer>
+          </article>
+          <% } %>
+      </div>
   </main>
-
 </body>
 
 </html>
