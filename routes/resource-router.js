@@ -1,13 +1,5 @@
 const express = require("express");
-<<<<<<< HEAD
-const { getSpecificResource, getComments, likeResource, rateResource } = require("../public/scripts/helpers");
-=======
-const {
-  getSpecificResource,
-  getComments,
-  createResource,
-} = require("../public/scripts/helpers");
->>>>>>> resource-post
+const { getSpecificResource, getComments, likeResource, rateResource, createResource } = require("../public/scripts/helpers");
 const router = express.Router();
 
 module.exports = (db) => {
@@ -37,16 +29,17 @@ module.exports = (db) => {
       });
   });
 
-      router.post("/", (req, res) => {
-        const resource = req.body;
-        console.log(resource);
-        createResource(resource, db)
-          .then((input) => {
-            console.log('resources collected : ' ,input);
-
-            res.redirect("/");
-          })
-          .catch((err) => err.message);
+  router.post("/", (req, res) => {
+    const resource = req.body;
+    const userID = req.session.userID;
+    console.log(userID);
+    console.log(resource);
+    createResource(resource, userID, db)
+      .then((input) => {
+        console.log('resources collected: ', input);
+        res.redirect("/");
+      })
+      .catch((err) => err.message);
   });
 
   router.post("/comments", (req, res) => {

@@ -1107,4 +1107,3 @@ insert into ratings (resource_id, rating) values (25, 4);
 insert into ratings (resource_id, rating) values (26, 2);
 insert into ratings (resource_id, rating) values (12, 0);
 insert into ratings (resource_id, rating) values (32, 0);
-
