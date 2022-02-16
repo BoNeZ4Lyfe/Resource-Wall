@@ -45,7 +45,7 @@ module.exports = (db) => {
   router.post("/comments", (req, res) => {
 
     const { comment, resource_id } = req.body;
-    const user_id = req.session.userId;
+    const user_id = req.session.userID; // changed from userId. comments work great!
 
     let query = `
     INSERT INTO resource_comments (resource_id, user_id, comment) VALUES ($1, $2, $3) RETURNING *;
