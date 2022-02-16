@@ -79,14 +79,15 @@ module.exports = (db) => {
   router.post("/:id", (req, res) => {
     const resourceID = req.body.resource;
     const userID = req.body.user;
+    const rating = req.body.rating;
 
-    if (req.body.rating) {
-      rateResource(db, resourceID, userID, req.body.rating)
-        .then(res => console.log("Resource rated: ", res))
+    if (rating) {
+      rateResource(db, resourceID, rating)
+        .then(res => console.log("Rating posted: ", res))
         .catch(err => console.log("rateResource: ", err.message));
     } else {
       likeResource(db, resourceID, userID)
-        .then(res => console.log("Resource liked: ", res))
+        .then(res => console.log("Like posted: ", res))
         .catch(err => console.log("likeResource: ", err.message));
     }
   });

@@ -1,6 +1,6 @@
 $(() => {
-const resource = JSON.parse(resourceData);
-const comments = JSON.parse(commentsData);
+  const resource = JSON.parse(resourceData);
+  const comments = JSON.parse(commentsData);
 
   const renderResourceElement = (resource) => {
     const htmlContent = `
@@ -16,6 +16,13 @@ const comments = JSON.parse(commentsData);
     </div>
     <footer class="resource-head-foot">
     <button id="rate">${Math.round((Number(resource.rating) + Number.EPSILON) * 100) / 100} ⭐️</button>
+    <div class="hide" id="rating-tool">
+    <button class="rate-star"id="st1">1 ⭐️</button>
+    <button class="rate-star"id="st2">2 ⭐️</button>
+    <button class="rate-star"id="st3">3 ⭐️</button>
+    <button class="rate-star"id="st4">4 ⭐️</button>
+    <button class="rate-star"id="st5">5 ⭐️</button>
+    </div>
     <button id="like">${resource.likes} 👍</button>
     </footer>
     </div>`;
@@ -45,7 +52,7 @@ const comments = JSON.parse(commentsData);
     }
 
     if (allOrLast === "last") {
-      renderComments(comments[comments.length-1]);
+      renderComments(comments[comments.length - 1]);
     }
   };
 
@@ -54,9 +61,9 @@ const comments = JSON.parse(commentsData);
 
 
   $("#like").on("click", () => {
-    $.post(`/resources/:id`, { resource: resource.id, user: resource.user_id })
+    $.post("/resources/:id", { resource: resource.id, user: resource.user_id })
       .done(() => {
-        console.log("Like successful");
+        console.log("Why do I have to suffer?");
       });
   });
 });
