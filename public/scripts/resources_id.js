@@ -1,8 +1,6 @@
 $(() => {
-  const resource = JSON.parse(resourceData);
-  const comments = JSON.parse(commentData);
-
-  console.log(resource);
+const resource = JSON.parse(resourceData);
+const comments = JSON.parse(commentsData);
 
   const renderResourceElement = (resource) => {
     const htmlContent = `
