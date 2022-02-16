@@ -45,7 +45,7 @@ module.exports = (db) => {
   router.post("/comments", (req, res) => {
 
     const { comment, resource_id } = req.body;
-    const user_id = req.session.userId;
+    const user_id = req.session.userID; // changed from userId. comments work great!
 
     let query = `
     INSERT INTO resource_comments (resource_id, user_id, comment) VALUES ($1, $2, $3) RETURNING *;
@@ -106,28 +106,13 @@ module.exports = (db) => {
 
   router.post("/:id", (req, res) => {
     const resourceID = req.body.resource;
-    const userID = req.body.user;
+    const userID = req.session.userID;
     const rating = req.body.rating;
 
-<<<<<<< HEAD
-    if (req.body.rating) {
-      rateResource(db, resourceID, userID, req.body.rating)
-        .then((res) => console.log("Resource rated: ", res))
-        .catch((err) => console.log("rateResource: ", err.message));
-    } else {
-      likeResource(db, resourceID, userID)
-        .then((res) => console.log("Resource liked: ", res))
-        .catch((err) => console.log("likeResource: ", err.message));
-=======
     if (rating) {
-      rateResource(db, resourceID, rating)
-        .then(res => console.log("Rating posted: ", res))
-        .catch(err => console.log("rateResource: ", err.message));
+      rateResource(db, resourceID, userID, rating)
     } else {
       likeResource(db, resourceID, userID)
-        .then(res => console.log("Like posted: ", res))
-        .catch(err => console.log("likeResource: ", err.message));
->>>>>>> master
     }
   });
 

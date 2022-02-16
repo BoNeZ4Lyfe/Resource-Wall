@@ -3,8 +3,9 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
   color: white;
+  padding-top: 4rem;
+  word-wrap: break-word;
 
   background: rgb(163, 208, 219);
   background: linear-gradient(
@@ -66,7 +67,6 @@ article.resource {
 .resource-content {
   margin: 1rem;
   width: 90%;
-  word-wrap: break-word;
 }
 
 .resource-head-foot {
@@ -107,4 +107,10 @@ article.resource {
 .main-text {
   //border-bottom: 2px solid blue;
   padding-bottom: 1rem;
+}
+
+#likes-rates {
+  display: flex;
+  justify-content: space-between;
+  width: 6rem;
 }

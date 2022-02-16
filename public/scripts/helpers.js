@@ -41,14 +41,13 @@ const updateUser = (db, property, id, update) => {
 
 const searchForResourceData = (db, search) => {
   const queryString = `
-    SELECT url, title, topic, description, created_at, users.name as creator, count(user_likes.*) as likes, avg(ratings.rating) as rating
+    SELECT url, title, topic, description, resources.created_at, resources.id, users.name as creator, avg(ratings.rating) as rating, (SELECT count(*) as likes FROM user_likes WHERE resource_id = resources.id), (SELECT count(*) as count FROM resource_comments WHERE resource_id = resources.id)
     FROM resources
     JOIN users ON user_id = users.id
-    JOIN user_likes ON user_likes.resource_id = resources.id
     JOIN ratings ON ratings.resource_id = resources.id
     WHERE title LIKE ('%' || $1 || '%') OR description LIKE ('%' || $1 || '%') OR topic LIKE ('%' || $1 || '%')
-    GROUP BY resources.url, resources.title, resources.description, resources.topic, resources.created_at, users.name
-    ORDER BY rating, likes;`
+    GROUP BY resources.url, resources.title, resources.description, resources.topic, resources.created_at, resources.id, users.name
+    ORDER BY rating DESC, likes DESC;`
 
   const values = [search];
 
@@ -59,15 +58,25 @@ const searchForResourceData = (db, search) => {
 };
 
 const selectMyResources = (db, userID) => {
+  // const queryString = `
+  //   SELECT url, title, topic, description, created_at, users.name as creator, count(user_likes.*) as likes, avg(ratings.rating) as rating
+  //   FROM resources
+  //   JOIN users ON user_id = users.id
+  //   JOIN user_likes ON user_likes.resource_id = resources.id
+  //   JOIN ratings ON ratings.resource_id = resources.id
+  //   WHERE users.id = ${userID} OR user_likes.user_id = ${userID}
+  //   GROUP BY resources.url, resources.title, resources.description, resources.topic, resources.created_at, users.name
+  //   ORDER BY rating, likes;`
+
   const queryString = `
-    SELECT url, title, topic, description, created_at, users.name as creator, count(user_likes.*) as likes, avg(ratings.rating) as rating
+    SELECT DISTINCT resources.id, resources.title, resources.topic, resources.url, resources.description, users.name as creator, avg(ratings.rating) as rating, (SELECT count(*) FROM resource_comments WHERE resource_id = resources.id), (SELECT count(*) as likes FROM user_likes WHERE resource_id = resources.id)
     FROM resources
-    JOIN users ON user_id = users.id
-    JOIN user_likes ON user_likes.resource_id = resources.id
-    JOIN ratings ON ratings.resource_id = resources.id
-    WHERE users.id = ${userID} OR user_likes.user_id = ${userID}
-    GROUP BY resources.url, resources.title, resources.description, resources.topic, resources.created_at, users.name
-    ORDER BY rating, likes;`
+    JOIN users ON users.id = resources.user_id
+    JOIN ratings ON resources.id = ratings.resource_id
+    JOIN user_likes ON resources.id = user_likes.resource_id
+    WHERE resources.user_id = ${userID} OR user_likes.user_id = ${userID}
+    GROUP BY resources.id, resources.title, resources.topic, resources.url, resources.description, users.name, user_likes.user_id;`;
+
 
   return db
     .query(queryString)
@@ -107,27 +116,78 @@ const getComments = (db, resourceID) => {
 };
 
 const likeResource = (db, resourceID, userID) => {
-  const queryString = `
+  const checkQueryString = `
+    SELECT user_likes.id as like, resources.id as resource, users.id as user
+    FROM user_likes
+    JOIN resources ON resource_id = resources.id
+    JOIN users ON user_likes.user_id = users.id
+    WHERE user_likes.user_id = ${userID} AND resource_id = ${resourceID};`;
+
+  const addLikeQueryString = `
     INSERT INTO user_likes (resource_id, user_id)
     VALUES (${resourceID}, ${userID})
-    RETURNING *;`
+    RETURNING *;`;
 
-  return db
-    .query(queryString)
+  const removeLikeQueryString = `
+    DELETE FROM user_likes
+    WHERE user_id = ${userID} AND resource_id = ${resourceID}
+    RETURNING *;`;
+
+  db.query(checkQueryString)
     .then(res => res.rows[0])
-    .catch(err => console.log("likeResource: ", err.message));
+    .then(res => {
+      if (res) {
+        return db
+          .query(removeLikeQueryString)
+          .then(res => console.log("remove like: ", res.rows[0]))
+          .catch(err => console.log("remove like: ", err));
+      } else {
+        return db
+          .query(addLikeQueryString)
+          .then(res => console.log("add like: ", res.rows[0]))
+          .catch(err => console.log("add like: ", err.message));
+      }
+    })
+    .catch(err => console.log("check for like: ", err));
 };
 
-const rateResource = (db, resourceID, rating) => {
-  const queryString = `
-    INSERT INTO ratings (resource_id, rating)
-    VALUES (${resourceID}, $1)
-    RETURNING *;`
 
-  return db
-    .query(queryString, [rating])
+
+const rateResource = (db, resourceID, userID, rating) => {
+  const checkQueryString = `
+    SELECT ratings.id as rating, resources.id as resource, users.id as user
+    FROM ratings
+    JOIN resources ON resource_id = resources.id
+    JOIN users ON ratings.user_id = users.id
+    WHERE ratings.user_id = ${userID} AND resource_id = ${resourceID};`;
+
+  const newRateQueryString = `
+    INSERT INTO ratings (resource_id, user_id, rating)
+    VALUES (${resourceID}, ${userID}, ${rating})
+    RETURNING *;`;
+
+  const changeRateQueryString = `
+    UPDATE ratings
+    SET rating = ${rating}
+    WHERE user_id = ${userID}
+    RETURNING *;`;
+
+  db.query(checkQueryString)
     .then(res => res.rows[0])
-    .catch(err => console.log("rateResource: ", err.message));
+    .then(res => {
+      if (res) {
+        return db
+          .query(changeRateQueryString)
+          .then(res => console.log("change rating: ", res.rows[0]))
+          .catch(err => console.log("change rating: ", err.message));
+      } else {
+        return db
+          .query(newRateQueryString)
+          .then(res => console.log("new rating: ", res.rows[0]))
+          .catch(err => console.log("new rating: ", err.message));
+      }
+    })
+    .catch(err => console.log("check for rating: ", err));
 };
 
 //Adds new user to the database
@@ -142,7 +202,7 @@ const addUser = function (user, db) {
     .catch((err) => console.log(err.message));
 };
 
-const createResource = function(resource, userID, db) {
+const createResource = function (resource, userID, db) {
   const values = [resource.topic, resource.url, resource.title, resource.description];
   const queryStr = `INSERT INTO resources (user_id, topic, url, title, description) VALUES (${userID}, $1, $2, $3, $4);`;
 

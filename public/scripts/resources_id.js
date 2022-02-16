@@ -2,33 +2,8 @@ $(() => {
   const resource = JSON.parse(resourceData);
   const comments = JSON.parse(commentsData);
 
-  const renderResourceElement = (resource) => {
-    const htmlContent = `
-    <div id="resource-main">
-    <header class="resource-head-foot">
-    <h4>${resource.title}</h4>
-    <h4>${resource.topic}</h4>
-    </header>
-    <div class="resource-content">
-    <a href="${resource.url}">${resource.url}</a>
-    <p class="main-text">${resource.description}<p>
-    <p>Created ${timeago.format(resource.created_at)} by ${resource.creator}</a>
-    </div>
-    <footer class="resource-head-foot">
-    <button id="rate">${Math.round((Number(resource.rating) + Number.EPSILON) * 100) / 100} ⭐️</button>
-    <div class="hide" id="rating-tool">
-    <button class="rate-star"id="st1">1 ⭐️</button>
-    <button class="rate-star"id="st2">2 ⭐️</button>
-    <button class="rate-star"id="st3">3 ⭐️</button>
-    <button class="rate-star"id="st4">4 ⭐️</button>
-    <button class="rate-star"id="st5">5 ⭐️</button>
-    </div>
-    <button id="like">${resource.likes} 👍</button>
-    </footer>
-    </div>`;
-
-    $("body").prepend(htmlContent);
-  };
+  createdAt = $("#timeago").html();
+  $("#timeago").html(timeago.format(createdAt));
 
   const createCommentElement = (comment) => {
     return `
@@ -57,8 +32,6 @@ $(() => {
   };
 
   loadComments("all");
-  renderResourceElement(resource);
-
 
   $("#like").on("click", () => {
     $.post("/resources/:id", { resource: resource.id, user: resource.user_id })
