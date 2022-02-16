@@ -4,6 +4,7 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  color: white;
 
   background: rgb(163, 208, 219);
   background: linear-gradient(
@@ -34,7 +35,8 @@ nav {
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  background: #00ffff;
+  background-color: #787878;
+  background-image: url("https://www.transparenttextures.com/patterns/grunge-wall.png");
   padding: 0 1.5em;
 }
 
@@ -52,10 +54,12 @@ div.resource-containter {
 
 article.resource {
   display: flex;
+  background-color: #000000;
+  background-image: url("https://www.transparenttextures.com/patterns/brick-wall.png");
   flex-direction: column;
   justify-content: space-between;
   margin-bottom: 0.5rem;
-  border: 2px solid blue;
+  border: 4px solid black;
   width: 40%;
 }
 
@@ -93,7 +97,7 @@ article.resource {
   justify-content: space-evenly;
   margin: 7rem 7rem 2rem;
   width: 60%;
-  border: 3px solid blue;
+  //border: 3px solid blue;
 }
 
 #comments {
@@ -101,11 +105,11 @@ article.resource {
 }
 
 .comment {
-  border: 3px solid blue;
+  //border: 3px solid blue;
   margin-bottom: 1rem;
 }
 
 .main-text {
-  border-bottom: 2px solid blue;
+  //border-bottom: 2px solid blue;
   padding-bottom: 1rem;
 }
