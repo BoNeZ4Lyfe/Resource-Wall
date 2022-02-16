@@ -142,6 +142,17 @@ const addUser = function (user, db) {
     .catch((err) => console.log(err.message));
 };
 
+const createResource = function(resource, db) {
+  const values = [`${resource.topic}`, `${resource.url}`, `${resource.title}`,`${resource.description}`, `${resource.user_id}`, `${resource.created_at}`];
+  const queryStr = `INSERT INTO resources (topic, url, title, description)
+  VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;`;
+
+  return db
+    .query(queryStr, values)
+    .then((res) => res.rows[0])
+    .catch((err) => console.log(err.message));
+};
+
 //moved to the bottom
 module.exports = {
   addUser,
@@ -153,6 +164,10 @@ module.exports = {
   selectMyResources,
   getSpecificResource,
   getComments,
+<<<<<<< HEAD
   likeResource,
   rateResource
+=======
+  createResource
+>>>>>>> resource-post
 };
