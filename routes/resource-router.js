@@ -71,7 +71,6 @@ module.exports = (db) => {
       .then(() => getComments(db, req.params.id))
       .then((comments) => {
         templateVars.comments = comments;
-        console.log(templateVars);
         res.render("resources_id", templateVars);
       })
       .catch(err => console.log(`GET resources/${req.params.id}: `, err.message));
@@ -79,18 +78,17 @@ module.exports = (db) => {
 
   router.post("/:id", (req, res) => {
     const resourceID = req.body.resource;
-    const userID = req.body.user;
+    const userID = req.session.userID;
     const rating = req.body.rating;
 
     if (rating) {
       rateResource(db, resourceID, rating)
         .then(res => console.log("Rating posted: ", res))
         .catch(err => console.log("rateResource: ", err.message));
-    } else if (comment){
+    // } else if (comment){
 
-    } else { likeResource(db, resourceID, userID)
-      .then(res => console.log("Like posted: ", res))
-      .catch(err => console.log("likeResource: ", err.message));
+    } else {
+      likeResource(db, resourceID, userID)
     }
   });
 

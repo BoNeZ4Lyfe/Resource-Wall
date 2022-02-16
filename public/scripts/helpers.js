@@ -58,15 +58,25 @@ const searchForResourceData = (db, search) => {
 };
 
 const selectMyResources = (db, userID) => {
+  // const queryString = `
+  //   SELECT url, title, topic, description, created_at, users.name as creator, count(user_likes.*) as likes, avg(ratings.rating) as rating
+  //   FROM resources
+  //   JOIN users ON user_id = users.id
+  //   JOIN user_likes ON user_likes.resource_id = resources.id
+  //   JOIN ratings ON ratings.resource_id = resources.id
+  //   WHERE users.id = ${userID} OR user_likes.user_id = ${userID}
+  //   GROUP BY resources.url, resources.title, resources.description, resources.topic, resources.created_at, users.name
+  //   ORDER BY rating, likes;`
+
   const queryString = `
-    SELECT url, title, topic, description, created_at, users.name as creator, count(user_likes.*) as likes, avg(ratings.rating) as rating
+    SELECT DISTINCT resources.id, resources.title, resources.topic, resources.url, resources.description, users.name as creator, avg(ratings.rating) as rating, (SELECT count(*) FROM resource_comments WHERE resource_id = resources.id), (SELECT count(*) as likes FROM user_likes WHERE resource_id = resources.id)
     FROM resources
-    JOIN users ON user_id = users.id
-    JOIN user_likes ON user_likes.resource_id = resources.id
-    JOIN ratings ON ratings.resource_id = resources.id
-    WHERE users.id = ${userID} OR user_likes.user_id = ${userID}
-    GROUP BY resources.url, resources.title, resources.description, resources.topic, resources.created_at, users.name
-    ORDER BY rating, likes;`
+    JOIN users ON users.id = resources.user_id
+    JOIN ratings ON resources.id = ratings.resource_id
+    JOIN user_likes ON resources.id = user_likes.resource_id
+    WHERE resources.user_id = ${userID} OR user_likes.user_id = ${userID}
+    GROUP BY resources.id, resources.title, resources.topic, resources.url, resources.description, users.name, user_likes.user_id;`;
+
 
   return db
     .query(queryString)
@@ -105,17 +115,50 @@ const getComments = (db, resourceID) => {
 
 };
 
+`
+SELECT user_likes.*, resources.id, users.*
+FROM user_likes
+JOIN resources ON resource_id = resources.id
+JOIN users ON user_likes.user_id = users.id
+WHERE user_likes.user_id = 1 AND resource_id = 8;`
+
 const likeResource = (db, resourceID, userID) => {
-  const queryString = `
+  const checkQueryString = `
+    SELECT user_likes.id, resources.id, users.id
+    FROM user_likes
+    JOIN resources ON resource_id = resources.id
+    JOIN users ON user_likes.user_id = users.id
+    WHERE user_likes.user_id = ${userID} AND resource_id = ${resourceID};`;
+
+  const addLikeQueryString = `
     INSERT INTO user_likes (resource_id, user_id)
     VALUES (${resourceID}, ${userID})
-    RETURNING *;`
+    RETURNING *;`;
 
-  return db
-    .query(queryString)
+  const removeLikeQueryString = `
+    DELETE FROM user_likes
+    WHERE user_id = ${userID} AND resource_id = ${resourceID}
+    RETURNING *;`;
+
+  db.query(checkQueryString)
     .then(res => res.rows[0])
-    .catch(err => console.log("likeResource: ", err.message));
+    .then(res => {
+      if (res) {
+        return db
+          .query(removeLikeQueryString)
+          .then(res => console.log("remove like: ", res.rows[0]))
+          .catch(err => console.log("remove like: ", err));
+      } else {
+        return db
+          .query(addLikeQueryString)
+          .then(res => console.log("add like: ", res.rows[0]))
+          .catch(err => console.log("add like: ", err.message));
+      }
+    })
+    .catch(err => console.log("check for like: ", err));
 };
+
+
 
 const rateResource = (db, resourceID, rating) => {
   const queryString = `
@@ -141,7 +184,7 @@ const addUser = function (user, db) {
     .catch((err) => console.log(err.message));
 };
 
-const createResource = function(resource, userID, db) {
+const createResource = function (resource, userID, db) {
   const values = [resource.topic, resource.url, resource.title, resource.description];
   const queryStr = `INSERT INTO resources (user_id, topic, url, title, description) VALUES (${userID}, $1, $2, $3, $4);`;
 
