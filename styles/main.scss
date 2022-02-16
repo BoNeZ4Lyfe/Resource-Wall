@@ -109,8 +109,12 @@ article.resource {
   padding-bottom: 1rem;
 }
 
-#likes-rates {
+.spread {
   display: flex;
   justify-content: space-between;
-  width: 6rem;
+  width: 25%;
+}
+
+.full {
+  width: 100%;
 }

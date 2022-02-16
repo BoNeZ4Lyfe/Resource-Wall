@@ -73,7 +73,6 @@
         <% for(const resource of resources) { %>
           <article class="resource">
             <header class="resource-head-foot">
-
               <h4>
                 <%= resource.title %>
               </h4>
@@ -89,13 +88,18 @@
               <p>
                 <%= resource.description %>
               </p>
-              <p>
-                <%= resource.count %> comments
-              </p>
+              <div class="spread full">
+                <p>
+                  Created by <%= resource.creator %>
+                </p>
+                <p>
+                  <%= resource.count %> comments
+                </p>
+              </div>
             </div>
             <footer class="resource-head-foot">
               <button class="btn btn--comment" id="<%= resource.id %>" type="submit">Add comment</button>
-              <div id="likes-rates">
+              <div class="spread small">
                 <p>
                   <%= Math.round((Number(resource.rating) + Number.EPSILON) * 100) / 100 %> ⭐️
                 </p>
