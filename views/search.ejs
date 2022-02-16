@@ -26,15 +26,17 @@
         </h3>
         <p>Your search returned <%= result.length %> results!</p>
       </div>
-      <div class="resource-containter">
+      <div class="resource-container show">
         <% for (const resource of result) { %>
           <article class="resource">
             <header class="resource-head-foot">
 
-                <h4>
-                  <%= resource.title %>
-                </h4>
-                <h4><%= resource.topic %></h4>
+              <h4>
+                <%= resource.title %>
+              </h4>
+              <h4>
+                <%= resource.topic %>
+              </h4>
 
             </header>
             <div class="resource-content" id="<%= resource.id %>">
@@ -44,15 +46,24 @@
               <p>
                 <%= resource.description %>
               </p>
-              <p>
-                <%= resource.count %> comments
-              </p>
+              <div class="spread full">
+                <p>
+                  Created by <%= resource.creator %>
+                </p>
+                <p>
+                  <%= resource.count %> comments
+                </p>
+              </div>
             </div>
             <footer class="resource-head-foot">
-              <button class="btn btn--comment" name="<%= resource.id %>" type="submit">Add comment</button>
-              <div id="likes-rates">
-                <p><%= Math.round((Number(resource.rating) + Number.EPSILON) * 100) / 100 %> ⭐️</p>
-                <p><%= resource.likes %> 👍</p>
+              <button class="btn btn--comment" id="<%= resource.id %>" type="submit">Add comment</button>
+              <div class="spread small">
+                <p>
+                  <%= Math.round((Number(resource.rating) + Number.EPSILON) * 100) / 100 %> ⭐️
+                </p>
+                <p>
+                  <%= resource.likes %> 👍
+                </p>
               </div>
             </footer>
           </article>
