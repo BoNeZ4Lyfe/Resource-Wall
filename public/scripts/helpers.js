@@ -115,16 +115,9 @@ const getComments = (db, resourceID) => {
 
 };
 
-`
-SELECT user_likes.*, resources.id, users.*
-FROM user_likes
-JOIN resources ON resource_id = resources.id
-JOIN users ON user_likes.user_id = users.id
-WHERE user_likes.user_id = 1 AND resource_id = 8;`
-
 const likeResource = (db, resourceID, userID) => {
   const checkQueryString = `
-    SELECT user_likes.id, resources.id, users.id
+    SELECT user_likes.id as like, resources.id as resource, users.id as user
     FROM user_likes
     JOIN resources ON resource_id = resources.id
     JOIN users ON user_likes.user_id = users.id
@@ -160,16 +153,41 @@ const likeResource = (db, resourceID, userID) => {
 
 
 
-const rateResource = (db, resourceID, rating) => {
-  const queryString = `
-    INSERT INTO ratings (resource_id, rating)
-    VALUES (${resourceID}, $1)
-    RETURNING *;`
+const rateResource = (db, resourceID, userID, rating) => {
+  const checkQueryString = `
+    SELECT ratings.id as rating, resources.id as resource, users.id as user
+    FROM ratings
+    JOIN resources ON resource_id = resources.id
+    JOIN users ON ratings.user_id = users.id
+    WHERE ratings.user_id = ${userID} AND resource_id = ${resourceID};`;
 
-  return db
-    .query(queryString, [rating])
+  const newRateQueryString = `
+    INSERT INTO ratings (resource_id, user_id, rating)
+    VALUES (${resourceID}, ${userID}, ${rating})
+    RETURNING *;`;
+
+  const changeRateQueryString = `
+    UPDATE ratings
+    SET rating = ${rating}
+    WHERE user_id = ${userID}
+    RETURNING *;`;
+
+  db.query(checkQueryString)
     .then(res => res.rows[0])
-    .catch(err => console.log("rateResource: ", err.message));
+    .then(res => {
+      if (res) {
+        return db
+          .query(changeRateQueryString)
+          .then(res => console.log("change rating: ", res.rows[0]))
+          .catch(err => console.log("change rating: ", err.message));
+      } else {
+        return db
+          .query(newRateQueryString)
+          .then(res => console.log("new rating: ", res.rows[0]))
+          .catch(err => console.log("new rating: ", err.message));
+      }
+    })
+    .catch(err => console.log("check for rating: ", err));
 };
 
 //Adds new user to the database

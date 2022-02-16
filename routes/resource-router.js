@@ -82,11 +82,7 @@ module.exports = (db) => {
     const rating = req.body.rating;
 
     if (rating) {
-      rateResource(db, resourceID, rating)
-        .then(res => console.log("Rating posted: ", res))
-        .catch(err => console.log("rateResource: ", err.message));
-    // } else if (comment){
-
+      rateResource(db, resourceID, userID, rating)
     } else {
       likeResource(db, resourceID, userID)
     }
