@@ -7,16 +7,40 @@ $(() => {
       $("#resource-create").addClass("show");
     }
 
-    const classesOnBtn = $(".btn--new").attr("class");
-    if (classesOnBtn.includes("show")) {
-      $(".btn--new").removeClass("show");
-      $(".btn--new").addClass("hide");
-    }
+    $(".btn--new").toggle();
 
     $(".resource-containter").toggle();
-    // if (classesOnResources.includes("show")) {
-    //   $(".resource-containter").removeClass("show");
-    //   $(".resource-containter").addClass("hide");
-    // }
+  });
+
+  $("#resource-create").on("submit", (e) => {
+    e.preventDefault();
+    const resourceTitle = $("#resource_title").val();
+    const resourceUrl = $("#resource_url").val();
+    const resourceDescription = $("#resource_description").val();
+    const resourceTopic = $("#resource_topic").val();
+
+    console.log("TITLE:", resourceTitle);
+    console.log("URL:", resourceUrl);
+    console.log("Description:", resourceDescription);
+    console.log("TOPIC", resourceTopic);
+
+    $.ajax({
+      type: "POST",
+      url: "/resources/new",
+      data: {
+        title: resourceTitle,
+        url: resourceUrl,
+        description: resourceDescription,
+        topic: resourceTopic,
+      },
+    }).then(() => {
+      window.location.href = `/resources`;
+    });
+
+    //     $("#comment-create").toggle();
+
+    //     $(".btn--new").toggle();
+
+    //     $(".resource-containter").toggle();
   });
 });

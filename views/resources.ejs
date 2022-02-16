@@ -40,24 +40,24 @@
         <button class="btn btn--new show">Add new</button>
       </div>
 
-      <form action="/resources" method="post" id="resource-create" class="new-resource-form hide">
+      <form action="/resources/new" method="post" id="resource-create" class="new-resource-form hide">
         <div class="new-resource-title">
             <label for="new-resource-title">Title</label>
-            <input type="text" name="title" placeholder="Title" >
+            <input id="resource_title" type="text" name="title" placeholder="Title" >
         </div>
 
         <div class="new-resource-url">
             <label for="new-resource-url">URL</label>
-            <input type="url" name="url" placeholder="URL" >
+            <input id="resource_url" type="url" name="url" placeholder="URL" >
         </div>
 
         <div class="new-resource-description">
             <label for="new-property-form__description">Description</label>
-            <textarea placeholder="Description" name="description" cols="30" rows="10"></textarea>
+            <textarea id="resource_description" placeholder="Description" name="description" cols="30" rows="10"></textarea>
         </div>
 
         <label for="topic">Choose a topic:</label>
-          <select name="topic">
+          <select id="resource_topic" name="topic">
             <optgroup label="Markup/Design">
                 <option value=""></option>
                 <option value="html">HTML</option>

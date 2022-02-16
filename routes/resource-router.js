@@ -19,7 +19,7 @@ module.exports = (db) => {
     ;`
     )
       .then((data) => {
-        console.log("DATA", data.rows);
+        // console.log("DATA", data.rows);
         const templateVars = {
           resources: data.rows,
           loggedIn: req.session.loggedIn,
@@ -35,18 +35,43 @@ module.exports = (db) => {
   });
 
   router.post("/comments", (req, res) => {
-    console.log("REQUEST", req.body);
     const { comment, resource_id } = req.body;
-    const user_id = req.session.userID;
+    const user_id = req.session.userId;
 
     let query = `
-    insert into resource_comments (resource_id, user_id, comment) values ($1, $2, $3);
+    INSERT INTO resource_comments (resource_id, user_id, comment) VALUES ($1, $2, $3) RETURNING *;
     `;
     const values = [resource_id, user_id, comment];
 
-    // db.query(query, values).then((res) => {
-    //   console.log(res.body);
-    // });
+    db.query(query, values)
+      .then((result) => {
+        console.log("🔴", result.rows[0]);
+        res.send("OK");
+      })
+      .catch((err) => console.log("Can not post the comment: ", err.message));
+  });
+
+  router.post("/new", (req, res) => {
+    const { title, url, description, topic } = req.body;
+    const user_id = req.session.userId;
+    console.log("TITLE:", title);
+    console.log("URL:", url);
+    console.log("Description:", description);
+    console.log("Topic:", topic);
+
+    let query = `
+    INSERT INTO resources (user_id, topic, url, title, description) VALUES ($1, $2, $3, $4, $5) RETURNING *;
+    `;
+    const values = [user_id, topic, url, title, description];
+
+    db.query(query, values)
+      .then((result) => {
+        console.log("🔴", result.rows[0]);
+        res.send("OK");
+      })
+      .catch((err) =>
+        console.log("Can not post the created resource: ", err.message)
+      );
   });
 
   router.get("/:id", (req, res) => {

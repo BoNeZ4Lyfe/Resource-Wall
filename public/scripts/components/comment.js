@@ -1,7 +1,5 @@
 $(() => {
   const classesOnComment = $("#comment-create").attr("class");
-  const classesOnBtn = $(".btn--new").attr("class");
-  const classesOnResources = $(".resource-containter").attr("class");
 
   $(".btn--comment").on("click", () => {
     if (classesOnComment.includes("hide")) {
@@ -9,36 +7,31 @@ $(() => {
       $("#comment-create").addClass("show");
     }
 
-    if (classesOnBtn.includes("show")) {
-      $(".btn--new").removeClass("show");
-      $(".btn--new").addClass("hide");
-    }
+    $(".btn--new").toggle();
 
-    if (classesOnResources.includes("show")) {
-      $(".resource-containter").removeClass("show");
-      $(".resource-containter").addClass("hide");
-    }
+    $(".resource-containter").toggle();
   });
 
-  // $("#comment-create").on("submit", (e) => {
-  //   e.preventDefault();
-  //   const comment = $("#comment-text").val();
-  //   console.log("comment:", comment);
+  const idOnResource = $(".resource-content").attr("id");
+  console.log("resource_ID", idOnResource);
 
-  //   $.post("/resources/comments", comment).then(() => {
-  //     console.log("success");
-  //   });
+  $("#comment-create").on("submit", (e) => {
+    e.preventDefault();
+    const comment = $("#comment-text").val();
+    console.log("comment:", comment);
 
-  //   if (classesOnComment.includes("hide")) {
-  //     $("#comment-create").toggle();
-  //   }
+    $.ajax({
+      type: "POST",
+      url: "/resources/comments",
+      data: { comment, resource_id: idOnResource },
+    }).then(() => {
+      window.location.href = `/resources/${idOnResource}`;
+    });
 
-  //   if (classesOnBtn.includes("show")) {
-  //     $(".btn--new").toggle();
-  //   }
+    // $("#comment-create").toggle();
 
-  //   if (classesOnResources.includes("show")) {
-  //     $(".resource-containter").toggle();
-  //   }
-  // });
+    // $(".btn--new").toggle();
+
+    // $(".resource-containter").toggle();
+  });
 });
