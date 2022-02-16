@@ -143,9 +143,9 @@ const addUser = function (user, db) {
 };
 
 const createResource = function(resource, db) {
-  const values = [`${resource.topic}`, `${resource.url}`, `${resource.title}`,`${resource.description}`, `${resource.user_id}`, `${resource.created_at}`];
+  const values = [`${resource.topic}`, `${resource.url}`, `${resource.title}`,`${resource.description}`];
   const queryStr = `INSERT INTO resources (topic, url, title, description)
-  VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;`;
+  VALUES ($1, $2, $3, $4) RETURNING *;`;
 
   return db
     .query(queryStr, values)
@@ -164,10 +164,7 @@ module.exports = {
   selectMyResources,
   getSpecificResource,
   getComments,
-<<<<<<< HEAD
   likeResource,
-  rateResource
-=======
+  rateResource,
   createResource
->>>>>>> resource-post
 };
