@@ -1,8 +1,5 @@
 const express = require("express");
-const {
-  getSpecificResource,
-  getComments,
-} = require("../public/scripts/helpers");
+const { getSpecificResource, getComments, likeResource, rateResource } = require("../public/scripts/helpers");
 const router = express.Router();
 
 module.exports = (db) => {
@@ -63,9 +60,22 @@ module.exports = (db) => {
         templateVars.comments = comments;
         res.render("resources_id", templateVars);
       })
-      .catch((err) =>
-        console.log(`GET resources/${req.params.id}: `, err.message)
-      );
+      .catch(err => console.log(`GET resources/${req.params.id}: `, err.message));
+  });
+
+  router.post("/:id", (req, res) => {
+    const resourceID = req.body.resource;
+    const userID = req.body.user;
+
+    if (req.body.rating) {
+      rateResource(db, resourceID, userID, req.body.rating)
+        .then(res => console.log("Resource rated: ", res))
+        .catch(err => console.log("rateResource: ", err.message));
+    } else {
+      likeResource(db, resourceID, userID)
+        .then(res => console.log("Resource liked: ", res))
+        .catch(err => console.log("likeResource: ", err.message));
+    }
   });
 
   return router;
