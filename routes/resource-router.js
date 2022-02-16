@@ -1,10 +1,14 @@
 const express = require("express");
+<<<<<<< HEAD
 const {
   getSpecificResource,
   getComments,
   likeResource,
   rateResource,
 } = require("../public/scripts/helpers");
+=======
+const { getSpecificResource, getComments, likeResource, rateResource, createResource } = require("../public/scripts/helpers");
+>>>>>>> master
 const router = express.Router();
 
 module.exports = (db) => {
@@ -34,7 +38,21 @@ module.exports = (db) => {
       });
   });
 
+  router.post("/", (req, res) => {
+    const resource = req.body;
+    const userID = req.session.userID;
+    console.log(userID);
+    console.log(resource);
+    createResource(resource, userID, db)
+      .then((input) => {
+        console.log('resources collected: ', input);
+        res.redirect("/");
+      })
+      .catch((err) => err.message);
+  });
+
   router.post("/comments", (req, res) => {
+
     const { comment, resource_id } = req.body;
     const user_id = req.session.userId;
 
@@ -98,7 +116,9 @@ module.exports = (db) => {
   router.post("/:id", (req, res) => {
     const resourceID = req.body.resource;
     const userID = req.body.user;
+    const rating = req.body.rating;
 
+<<<<<<< HEAD
     if (req.body.rating) {
       rateResource(db, resourceID, userID, req.body.rating)
         .then((res) => console.log("Resource rated: ", res))
@@ -107,6 +127,16 @@ module.exports = (db) => {
       likeResource(db, resourceID, userID)
         .then((res) => console.log("Resource liked: ", res))
         .catch((err) => console.log("likeResource: ", err.message));
+=======
+    if (rating) {
+      rateResource(db, resourceID, rating)
+        .then(res => console.log("Rating posted: ", res))
+        .catch(err => console.log("rateResource: ", err.message));
+    } else {
+      likeResource(db, resourceID, userID)
+        .then(res => console.log("Like posted: ", res))
+        .catch(err => console.log("likeResource: ", err.message));
+>>>>>>> master
     }
   });
 

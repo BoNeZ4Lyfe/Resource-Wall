@@ -118,10 +118,10 @@ const likeResource = (db, resourceID, userID) => {
     .catch(err => console.log("likeResource: ", err.message));
 };
 
-const rateResource = (db, resourceID, userID, rating) => {
+const rateResource = (db, resourceID, rating) => {
   const queryString = `
-    INSERT INTO ratings (resource_id, user_id, rating)
-    VALUES (${resourceID}, ${userID}, $1)
+    INSERT INTO ratings (resource_id, rating)
+    VALUES (${resourceID}, $1)
     RETURNING *;`
 
   return db
@@ -142,6 +142,16 @@ const addUser = function (user, db) {
     .catch((err) => console.log(err.message));
 };
 
+const createResource = function(resource, userID, db) {
+  const values = [resource.topic, resource.url, resource.title, resource.description];
+  const queryStr = `INSERT INTO resources (user_id, topic, url, title, description) VALUES (${userID}, $1, $2, $3, $4);`;
+
+  return db
+    .query(queryStr, values)
+    .then((res) => res.rows[0])
+    .catch((err) => console.log(err.message));
+};
+
 //moved to the bottom
 module.exports = {
   addUser,
@@ -154,5 +164,6 @@ module.exports = {
   getSpecificResource,
   getComments,
   likeResource,
-  rateResource
+  rateResource,
+  createResource
 };
