@@ -112,10 +112,11 @@ module.exports = (db) => {
     const rating = req.body.rating;
 
     if (rating) {
-      rateResource(db, resourceID, userID, rating)
+      rateResource(db, resourceID, userID, rating);
     } else {
-      likeResource(db, resourceID, userID)
+      likeResource(db, resourceID, userID);
     }
+    res.json({result: "Post complete 🥳"});
   });
 
   return router;
