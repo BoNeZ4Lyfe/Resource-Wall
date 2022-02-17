@@ -1,5 +1,5 @@
 $(() => {
-  $(".btn--new").on("click", () => {
+  $(".btn-secondary").on("click", () => {
     const classesOnCreate = $("#resource-create").attr("class");
 
     if (classesOnCreate.includes("hide")) {
@@ -7,7 +7,7 @@ $(() => {
       $("#resource-create").addClass("show");
     }
 
-    $(".btn--new").toggle();
+    $(".btn-secondary").toggle();
 
     $(".resource-container").toggle();
   });
