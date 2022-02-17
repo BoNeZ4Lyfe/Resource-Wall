@@ -3,9 +3,6 @@ const router = express.Router();
 
 module.exports = (db) => {
   router.post("/", (req, res) => {
-    // req.session.loggedIn = false;
-    // req.session.userID = null;
-    // req.session.username = null;
     console.log(req.session);
     req.session = null;
     res.redirect("/");

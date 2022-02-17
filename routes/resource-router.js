@@ -8,7 +8,7 @@ const {
   createResource,
   getLikedResources,
   getUserResources
-} = require("../public/scripts/helpers");
+} = require("./helpers");
 
 module.exports = (db) => {
   router.get("/", (req, res) => {

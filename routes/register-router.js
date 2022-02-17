@@ -1,5 +1,5 @@
 const express = require("express");
-const { addUser } = require("../public/scripts/helpers");
+const { addUser } = require("./helpers");
 const router = express.Router();
 
 // GET /register

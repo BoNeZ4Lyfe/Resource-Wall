@@ -1,5 +1,5 @@
 const express = require("express");
-const { userEmailLookup, getUsers } = require("../public/scripts/helpers");
+const { userEmailLookup, getUsers } = require("./helpers");
 const router = express.Router();
 
 // GET /login
