@@ -59,31 +59,28 @@ const searchForResourceData = (db, search) => {
 
 const getLikedResources = (db, userID) => {
   const queryUserLikes = `
-    SELECT url, title, topic, description, resources.created_at, resources.id, users.name as creator, avg(ratings.rating) as rating, count(resource_comments.id) as comments, count(user_likes.id) as likes
-    FROM resources
-    JOIN users ON resources.user_id = users.id
-    JOIN ratings ON ratings.resource_id = resources.id
-    JOIN resource_comments ON resource_comments.resource_id = resources.id
-    JOIN user_likes ON user_likes.resource_id = resources.id
-    WHERE user_likes.user_id = ${userID}
-    GROUP BY url, title, topic, description, resources.created_at, resources.id, users.name;`;
+  SELECT url, title, topic, description, resources.created_at, resources.id, users.name as creator, avg(ratings.rating) as rating, (SELECT count(resource_comments.id) as comments FROM resource_comments WHERE resource_comments.resource_id = resources.id), (SELECT count(user_likes.id) as likes FROM user_likes WHERE user_likes.resource_id = resources.id)
+  FROM resources
+  JOIN users ON resources.user_id = users.id
+  JOIN ratings ON ratings.resource_id = resources.id
+  JOIN user_likes ON user_likes.resource_id = resources.id
+  WHERE user_likes.user_id = ${userID}
+  GROUP BY url, title, topic, description, resources.created_at, resources.id, users.name;`;
 
-  return db
-    .query(queryUserLikes)
-    .then(res => res.rows)
-    .catch(err => console.log("query likes: ", err.message));
+return db
+  .query(queryUserLikes)
+  .then(res => res.rows)
+  .catch(err => console.log("query likes: ", err.message));
 };
 
 const getUserResources = (db, userID) => {
-  const queryUserResources = `
-    SELECT url, title, topic, description, resources.created_at, resources.id, users.name as creator, avg(ratings.rating) as rating, count(resource_comments.id) as comments, count(user_likes.id) as likes
-    FROM resources
-    JOIN users ON resources.user_id = users.id
-    JOIN ratings ON ratings.resource_id = resources.id
-    JOIN resource_comments ON resource_comments.resource_id = resources.id
-    JOIN user_likes ON user_likes.resource_id = resources.id
-    WHERE resources.user_id = ${userID}
-    GROUP BY url, title, topic, description, resources.created_at, resources.id, users.name;`;
+const queryUserResources = `
+  SELECT url, title, topic, description, resources.created_at, resources.id, users.name as creator, avg(ratings.rating) as rating, (SELECT count(resource_comments.id) as comments FROM resource_comments WHERE resource_comments.resource_id = resources.id), (SELECT count(user_likes.id) as likes FROM user_likes WHERE user_likes.resource_id = resources.id)
+  FROM resources
+  JOIN users ON resources.user_id = users.id
+  JOIN ratings ON ratings.resource_id = resources.id
+  WHERE resources.user_id = ${userID}
+  GROUP BY url, title, topic, description, resources.created_at, resources.id, users.name;`;
 
   return db
     .query(queryUserResources)
