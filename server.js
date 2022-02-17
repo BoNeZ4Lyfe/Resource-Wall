@@ -41,12 +41,6 @@ app.use(
 
 app.use(express.static("public"));
 
-<<<<<<< HEAD
-=======
-// Separated Routes for each Resource
-
-
->>>>>>> master
 // import the routers
 const logoutRouter = require("./routes/logout-router");
 const loginRouter = require("./routes/login-router");

@@ -1,9 +1,10 @@
+@import "../node_modules/bootstrap/scss/bootstrap";
+
 body {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  color: white;
   padding-top: 4rem;
   word-wrap: break-word;
 
@@ -116,4 +117,29 @@ article.resource {
 
 .full {
   width: 100%;
+}
+
+// LOGIN PAGE
+h1.login {
+  color: white;
+  text-align: center;
+  font-weight: 500;
+}
+
+.login {
+  color: white;
+  font-family: "Reggae One", cursive;
+}
+
+input.email,
+input.password {
+  border: none;
+  border-radius: 5px;
+  padding: 5px;
+  width: 200px;
+  height: 30px;
+}
+
+div#login {
+  margin-top: 120px;
 }
