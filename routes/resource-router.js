@@ -126,4 +126,19 @@ module.exports = (db) => {
 
     return router;
   });
+
+  router.post("/:id", (req, res) => {
+    const resourceID = req.body.resource;
+    const userID = req.session.userID;
+    const rating = req.body.rating;
+
+    if (rating) {
+      rateResource(db, resourceID, userID, rating);
+    } else {
+      likeResource(db, resourceID, userID);
+    }
+    res.json({ result: "Post complete 🥳" });
+  });
+
+  return router;
 };
