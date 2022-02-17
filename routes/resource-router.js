@@ -1,4 +1,5 @@
 const express = require("express");
+<<<<<<< HEAD
 const {
   getSpecificResource,
   getComments,
@@ -6,7 +7,16 @@ const {
   rateResource,
   createResource,
 } = require("../public/scripts/helpers");
+=======
+>>>>>>> master
 const router = express.Router();
+const {
+  getSpecificResource,
+  getComments,
+  likeResource, rateResource,
+  createResource,
+  selectMyResources
+} = require("../public/scripts/helpers");
 
 module.exports = (db) => {
   router.get("/", (req, res) => {
@@ -21,18 +31,25 @@ module.exports = (db) => {
     )
       .then((data) => {
         // console.log("DATA", data.rows);
+    const userID = req.session.userID;
+    const myResources = [];
+
+    selectMyResources(db, userID)
+      .then(resources => {
+        for (const resource of resources) {
+          myResources.push(resource);
+        }
+
         const templateVars = {
-          resources: data.rows,
+          resources: myResources,
           loggedIn: req.session.loggedIn,
           userID: req.session.userID,
-          username: req.session.username,
+          username: req.session.username
         };
-        // res.json(data.rows); // Not API request anymore
-        res.render("resources", templateVars); // <---- new edit
+
+        res.render("resources", templateVars);
       })
-      .catch((err) => {
-        res.status(500).json({ error: err.message });
-      });
+      .catch(err => console.log("Resources GET: ", err.message));
   });
 
   router.post("/", (req, res) => {

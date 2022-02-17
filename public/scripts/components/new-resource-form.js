@@ -9,7 +9,7 @@ $(() => {
 
     $(".btn--new").toggle();
 
-    $(".resource-containter").toggle();
+    $(".resource-container").toggle();
   });
 
   $("#resource-create").on("submit", (e) => {
@@ -31,5 +31,6 @@ $(() => {
     }).then(() => {
       window.location.href = `/resources`;
     });
+
   });
 });

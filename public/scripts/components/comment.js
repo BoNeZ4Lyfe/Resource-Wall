@@ -9,7 +9,7 @@ $(() => {
 
     $(".btn--new").toggle();
 
-    $(".resource-containter").toggle();
+    $(".resource-container").toggle();
   });
 
   const idOnResource = $(".resource-content").attr("id");
