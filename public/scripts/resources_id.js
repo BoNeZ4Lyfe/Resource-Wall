@@ -1,7 +1,6 @@
 $(() => {
   const resource = JSON.parse(resourceData);
   const comments = JSON.parse(commentsData);
-  console.log(commentsData);
 
   createdAt = $("#timeago").html();
   $("#timeago").html(timeago.format(createdAt));
