@@ -19,7 +19,6 @@ module.exports = (db) => {
     getLikedResources(db, userID)
       .then((resources) => {
         for (const resource of resources) {
-
           resourceIDs.push(resource.id);
           myResources.push(resource);
         }
@@ -30,7 +29,6 @@ module.exports = (db) => {
           if (resourceIDs.includes(resource.id)) {
             continue;
           }
-
           resourceIDs.push(resource.id);
           myResources.push(resource);
         }
@@ -60,7 +58,6 @@ module.exports = (db) => {
 
   router.post("/comments", (req, res) => {
     const { comment, resource_id } = req.body;
-
     const user_id = req.session.userID;
 
 
@@ -78,13 +75,13 @@ module.exports = (db) => {
   });
 
   router.post("/new", (req, res) => {
-    const { title, url, description, topic } = req.body;
+    const resource = req.body;
     const user_id = req.session.userID;
 
     let query = `
     INSERT INTO resources (user_id, topic, url, title, description) VALUES ($1, $2, $3, $4, $5) RETURNING *;
     `;
-    const values = [user_id, topic, url, title, description];
+    const values = [user_id, resource.topic, resource.url, resource.title, resource.description];
 
     db.query(query, values)
       .then((result) => {

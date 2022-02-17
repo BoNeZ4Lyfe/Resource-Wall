@@ -31,7 +31,7 @@ module.exports = (db) => {
             req.session.loggedIn = true;
             req.session.userID = user.id;
             req.session.username = user.name;
-            res.redirect("/");
+            res.redirect("/resources");
           } else {
             res.status(403).send("Incorrect password.");
           }
