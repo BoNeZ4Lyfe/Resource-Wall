@@ -1,12 +1,14 @@
 // queries database for user table and returns an array of user objects
 const getUsers = (db) => {
   return db
-    .query(`
+    .query(
+      `
     SELECT *
     FROM users;
-    `)
-    .then(users => users.rows)
-    .catch(err => console.log("getUsers: ", err.message));
+    `
+    )
+    .then((users) => users.rows)
+    .catch((err) => console.log("getUsers: ", err.message));
 };
 
 // checks user emails against target email and returns user object if email exists in database
@@ -31,12 +33,15 @@ const usernameLookup = (users, targetUsername) => {
 
 const updateUser = (db, property, id, update) => {
   return db
-    .query(`
+    .query(
+      `
     UPDATE users
     SET ${property} = $1
     WHERE id = ${id};
-    `, [update])
-    .catch(err => console.log("updateUser: ", err.message));
+    `,
+      [update]
+    )
+    .catch((err) => console.log("updateUser: ", err.message));
 };
 
 const searchForResourceData = (db, search) => {
@@ -47,14 +52,14 @@ const searchForResourceData = (db, search) => {
     JOIN ratings ON ratings.resource_id = resources.id
     WHERE title LIKE ('%' || $1 || '%') OR description LIKE ('%' || $1 || '%') OR topic LIKE ('%' || $1 || '%')
     GROUP BY resources.url, resources.title, resources.description, resources.topic, resources.created_at, resources.id, users.name
-    ORDER BY rating DESC, likes DESC;`
+    ORDER BY rating DESC, likes DESC;`;
 
   const values = [search];
 
   return db
     .query(queryString, values)
-    .then(result => result.rows)
-    .catch(err => console.log("SearchForResourceData: ", err.message));
+    .then((result) => result.rows)
+    .catch((err) => console.log("SearchForResourceData: ", err.message));
 };
 
 const getLikedResources = (db, userID) => {
@@ -70,8 +75,8 @@ const getLikedResources = (db, userID) => {
 
   return db
     .query(queryUserLikes)
-    .then(res => res.rows)
-    .catch(err => console.log("query likes: ", err.message));
+    .then((res) => res.rows)
+    .catch((err) => console.log("query likes: ", err.message));
 };
 
 const getUserResources = (db, userID) => {
@@ -87,25 +92,37 @@ const getUserResources = (db, userID) => {
 
   return db
     .query(queryUserResources)
-    .then(res => res.rows)
-    .catch(err => console.log("query resources: ", err.message));
+    .then((res) => res.rows)
+    .catch((err) => console.log("query resources: ", err.message));
 };
 
 const getSpecificResource = (db, resourceID) => {
-  const queryString = `
-    SELECT url, title, topic, description, created_at, users.name as creator, avg(ratings.rating) as rating, resources.id, resources.user_id, (SELECT count(*) as likes FROM user_likes WHERE resource_id = $1)
+  // const queryString = `
+  //   SELECT url, title, topic, description, created_at, users.name as creator, avg(ratings.rating) as rating, resources.id, resources.user_id, (SELECT count(*) as likes FROM user_likes WHERE resource_id = $1)
+  //   FROM resources
+  //   JOIN users ON user_id = users.id
+  //   JOIN user_likes ON user_likes.resource_id = resources.id
+  //   JOIN ratings ON ratings.resource_id = resources.id
+  //   WHERE resources.id = $1
+  //   GROUP BY resources.url, resources.title, resources.description, resources.topic, resources.created_at, users.name, resources.id, users.id
+  //   ORDER BY rating, likes;`;
+  const queryString = `SELECT url, title, topic, description, created_at, users.name as creator, avg(ratings.rating) as rating, resources.id, resources.user_id, (SELECT count(*) as likes FROM user_likes WHERE resource_id = $1)
     FROM resources
-    JOIN users ON user_id = users.id
-    JOIN user_likes ON user_likes.resource_id = resources.id
-    JOIN ratings ON ratings.resource_id = resources.id
+    LEFT JOIN users ON user_id = users.id
+    LEFT JOIN user_likes ON user_likes.resource_id = resources.id
+    LEFT JOIN ratings ON ratings.resource_id = resources.id
     WHERE resources.id = $1
     GROUP BY resources.url, resources.title, resources.description, resources.topic, resources.created_at, users.name, resources.id, users.id
-    ORDER BY rating, likes;`
+    ORDER BY rating, likes;`;
 
   return db
     .query(queryString, [resourceID])
-    .then(result => result.rows[0])
-    .catch(err => console.log("getSpecificResources: ", err.message));
+    .then((result) => {
+      // console.log("id", resourceID);
+      // console.log("result", result.rows);
+      return result.rows[0];
+    })
+    .catch((err) => console.log("getSpecificResources: ", err.message));
 };
 
 const getComments = (db, resourceID) => {
@@ -118,9 +135,8 @@ const getComments = (db, resourceID) => {
 
   return db
     .query(queryString, [resourceID])
-    .then(res => res.rows)
-    .catch(err => console.log("getComments: ", err.message));
-
+    .then((res) => res.rows)
+    .catch((err) => console.log("getComments: ", err.message));
 };
 
 const likeResource = (db, resourceID, userID) => {
@@ -142,24 +158,22 @@ const likeResource = (db, resourceID, userID) => {
     RETURNING *;`;
 
   db.query(checkQueryString)
-    .then(res => res.rows[0])
-    .then(res => {
+    .then((res) => res.rows[0])
+    .then((res) => {
       if (res) {
         return db
           .query(removeLikeQueryString)
-          .then(res => console.log("remove like: ", res.rows[0]))
-          .catch(err => console.log("remove like: ", err));
+          .then((res) => console.log("remove like: ", res.rows[0]))
+          .catch((err) => console.log("remove like: ", err));
       } else {
         return db
           .query(addLikeQueryString)
-          .then(res => console.log("add like: ", res.rows[0]))
-          .catch(err => console.log("add like: ", err.message));
+          .then((res) => console.log("add like: ", res.rows[0]))
+          .catch((err) => console.log("add like: ", err.message));
       }
     })
-    .catch(err => console.log("check for like: ", err));
+    .catch((err) => console.log("check for like: ", err));
 };
-
-
 
 const rateResource = (db, resourceID, userID, rating) => {
   const checkQueryString = `
@@ -181,21 +195,21 @@ const rateResource = (db, resourceID, userID, rating) => {
     RETURNING *;`;
 
   db.query(checkQueryString)
-    .then(res => res.rows[0])
-    .then(res => {
+    .then((res) => res.rows[0])
+    .then((res) => {
       if (res) {
         return db
           .query(changeRateQueryString)
-          .then(res => console.log("change rating: ", res.rows[0]))
-          .catch(err => console.log("change rating: ", err.message));
+          .then((res) => console.log("change rating: ", res.rows[0]))
+          .catch((err) => console.log("change rating: ", err.message));
       } else {
         return db
           .query(newRateQueryString)
-          .then(res => console.log("new rating: ", res.rows[0]))
-          .catch(err => console.log("new rating: ", err.message));
+          .then((res) => console.log("new rating: ", res.rows[0]))
+          .catch((err) => console.log("new rating: ", err.message));
       }
     })
-    .catch(err => console.log("check for rating: ", err));
+    .catch((err) => console.log("check for rating: ", err));
 };
 
 //Adds new user to the database
@@ -211,7 +225,12 @@ const addUser = function (user, db) {
 };
 
 const createResource = function (resource, userID, db) {
-  const values = [resource.topic, resource.url, resource.title, resource.description];
+  const values = [
+    resource.topic,
+    resource.url,
+    resource.title,
+    resource.description,
+  ];
   const queryStr = `INSERT INTO resources (user_id, topic, url, title, description) VALUES (${userID}, $1, $2, $3, $4);`;
 
   return db
@@ -234,5 +253,5 @@ module.exports = {
   getComments,
   likeResource,
   rateResource,
-  createResource
+  createResource,
 };

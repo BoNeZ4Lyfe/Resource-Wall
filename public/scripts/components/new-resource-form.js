@@ -28,9 +28,9 @@ $(() => {
         description: resourceDescription,
         topic: resourceTopic,
       },
-    }).then(() => {
-      window.location.href = `/resources`;
+    }).then((data) => {
+      console.log(data);
+      window.location.href = `/resources/${data.resource_id}`;
     });
-
   });
 });

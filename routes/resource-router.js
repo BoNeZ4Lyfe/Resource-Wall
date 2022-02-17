@@ -7,7 +7,7 @@ const {
   rateResource,
   createResource,
   getLikedResources,
-  getUserResources
+  getUserResources,
 } = require("./helpers");
 
 module.exports = (db) => {
@@ -17,20 +17,20 @@ module.exports = (db) => {
     const resourceIDs = [];
 
     getLikedResources(db, userID)
-      .then(resources => {
+      .then((resources) => {
         for (const resource of resources) {
-          console.log("Liked Stage: ", resource);
+          // console.log("Liked Stage: ", resource);
           resourceIDs.push(resource.id);
           myResources.push(resource);
         }
       })
       .then(() => getUserResources(db, userID))
-      .then(resources => {
+      .then((resources) => {
         for (const resource of resources) {
           if (resourceIDs.includes(resource.id)) {
             continue;
           }
-          console.log("Created Stage: ", resource);
+          // console.log("Created Stage: ", resource);
           resourceIDs.push(resource.id);
           myResources.push(resource);
         }
@@ -49,11 +49,11 @@ module.exports = (db) => {
   router.post("/", (req, res) => {
     const resource = req.body;
     const userID = req.session.userID;
-    console.log(userID);
-    console.log(resource);
+    // console.log(userID);
+    // console.log(resource);
     createResource(resource, userID, db)
       .then((input) => {
-        console.log("resources collected: ", input);
+        // console.log("resources collected: ", input);
         return res.redirect(`/resources/${resource.id}`);
       })
       .catch((err) => err.message);
@@ -61,9 +61,9 @@ module.exports = (db) => {
 
   router.post("/comments", (req, res) => {
     const { comment, resource_id } = req.body;
-    console.log(req.body)
+    // console.log(req.body);
     const user_id = req.session.userID;
-    console.log(user_id, resource_id, comment);
+    // console.log(user_id, resource_id, comment);
 
     let query = `
     INSERT INTO resource_comments (resource_id, user_id, comment) VALUES ($1, $2, $3) RETURNING *;
@@ -72,7 +72,7 @@ module.exports = (db) => {
 
     db.query(query, values)
       .then((result) => {
-        console.log("🔴", result.rows[0]);
+        // console.log("🔴", result.rows[0]);
         res.send("OK");
       })
       .catch((err) => console.log("Can not post the comment: ", err.message));
@@ -88,7 +88,10 @@ module.exports = (db) => {
     const values = [user_id, topic, url, title, description];
 
     db.query(query, values)
-      .then(res => console.log(res))
+      .then((result) => {
+        console.log(result.rows[0]);
+        res.json({ resource_id: result.rows[0].id });
+      })
       .catch((err) =>
         console.log("Can not post the created resource: ", err.message)
       );
@@ -104,7 +107,9 @@ module.exports = (db) => {
     };
 
     getSpecificResource(db, req.params.id)
-      .then((resource) => (templateVars.resource = resource))
+      .then((resource) => {
+        templateVars.resource = resource;
+      })
       .then(() => getComments(db, req.params.id))
       .then((comments) => {
         templateVars.comments = comments;
