@@ -19,7 +19,7 @@ module.exports = (db) => {
     getLikedResources(db, userID)
       .then(resources => {
         for (const resource of resources) {
-          console.log("Stage 1: ", resource);
+          console.log("Liked Stage: ", resource);
           resourceIDs.push(resource.id);
           myResources.push(resource);
         }
@@ -30,7 +30,7 @@ module.exports = (db) => {
           if (resourceIDs.includes(resource.id)) {
             continue;
           }
-          console.log("Stage 2: ", resource);
+          console.log("Created Stage: ", resource);
           resourceIDs.push(resource.id);
           myResources.push(resource);
         }
