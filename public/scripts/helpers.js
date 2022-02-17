@@ -57,21 +57,38 @@ const searchForResourceData = (db, search) => {
     .catch(err => console.log("SearchForResourceData: ", err.message));
 };
 
-const selectMyResources = (db, userID) => {
-  const queryString = `
-    SELECT DISTINCT resources.id, resources.title, resources.topic, resources.url, resources.description, users.name as creator, avg(ratings.rating) as rating, (SELECT count(*) as count FROM resource_comments WHERE resource_id = resources.id), (SELECT count(*) as likes FROM user_likes WHERE resource_id = resources.id)
+const getLikedResources = (db, userID) => {
+  const queryUserLikes = `
+    SELECT url, title, topic, description, resources.created_at, resources.id, users.name as creator, avg(ratings.rating) as rating, count(resource_comments.id) as comments, count(user_likes.id) as likes
     FROM resources
-    JOIN users ON users.id = resources.user_id
-    JOIN ratings ON resources.id = ratings.resource_id
-    JOIN user_likes ON resources.id = user_likes.resource_id
-    WHERE resources.user_id = ${userID} OR user_likes.user_id = ${userID}
-    GROUP BY resources.id, resources.title, resources.topic, resources.url, resources.description, users.name, user_likes.user_id;`;
-
+    JOIN users ON resources.user_id = users.id
+    JOIN ratings ON ratings.resource_id = resources.id
+    JOIN resource_comments ON resource_comments.resource_id = resources.id
+    JOIN user_likes ON user_likes.resource_id = resources.id
+    WHERE user_likes.user_id = ${userID}
+    GROUP BY url, title, topic, description, resources.created_at, resources.id, users.name;`;
 
   return db
-    .query(queryString)
-    .then(result => result.rows)
-    .catch(err => console.log("selectMyResources: ", err.message));
+    .query(queryUserLikes)
+    .then(res => res.rows)
+    .catch(err => console.log("query likes: ", err.message));
+};
+
+const getUserResources = (db, userID) => {
+  const queryUserResources = `
+    SELECT url, title, topic, description, resources.created_at, resources.id, users.name as creator, avg(ratings.rating) as rating, count(resource_comments.id) as comments, count(user_likes.id) as likes
+    FROM resources
+    JOIN users ON resources.user_id = users.id
+    JOIN ratings ON ratings.resource_id = resources.id
+    JOIN resource_comments ON resource_comments.resource_id = resources.id
+    JOIN user_likes ON user_likes.resource_id = resources.id
+    WHERE resources.user_id = ${userID}
+    GROUP BY url, title, topic, description, resources.created_at, resources.id, users.name;`;
+
+  return db
+    .query(queryUserResources)
+    .then(res => res.rows)
+    .catch(err => console.log("query resources: ", err.message));
 };
 
 const getSpecificResource = (db, resourceID) => {
@@ -96,7 +113,8 @@ const getComments = (db, resourceID) => {
     SELECT resource_comments.*, users.name as user_name
     FROM resource_comments
     JOIN users ON user_id = users.id
-    WHERE resource_id = $1;`
+    WHERE resource_id = $1
+    ORDER BY resource_comments.created_at;`;
 
   return db
     .query(queryString, [resourceID])
@@ -210,7 +228,8 @@ module.exports = {
   usernameLookup,
   updateUser,
   searchForResourceData,
-  selectMyResources,
+  getLikedResources,
+  getUserResources,
   getSpecificResource,
   getComments,
   likeResource,

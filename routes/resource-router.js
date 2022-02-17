@@ -6,7 +6,7 @@ const {
   likeResource,
   rateResource,
   createResource,
-  selectMyResources,
+  getMyResources,
 } = require("../public/scripts/helpers");
 
 module.exports = (db) => {
@@ -14,7 +14,7 @@ module.exports = (db) => {
     const userID = req.session.userID;
     const myResources = [];
 
-    selectMyResources(db, userID)
+    getMyResources(db, userID)
       .then((resources) => {
         for (const resource of resources) {
           myResources.push(resource);
