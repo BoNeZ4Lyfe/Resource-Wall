@@ -6,20 +6,32 @@ const {
   likeResource,
   rateResource,
   createResource,
-  getMyResources,
+  getLikedResources,
+  getUserResources
 } = require("../public/scripts/helpers");
 
 module.exports = (db) => {
   router.get("/", (req, res) => {
     const userID = req.session.userID;
     const myResources = [];
+    const resourceIDs = [];
 
-    getMyResources(db, userID)
-      .then((resources) => {
+    getLikedResources(db, userID)
+      .then(resources => {
         for (const resource of resources) {
+          resourceIDs.push(resource.id);
           myResources.push(resource);
         }
-
+      })
+      .then(() => getUserResources(db, userID))
+      .then(resources => {
+        for (const resource of resources) {
+          if (myResources.includes(resource.id)) {
+            continue;
+          }
+          resourceIDs.push(resource.id);
+          myResources.push(resource);
+        }
         const templateVars = {
           resources: myResources,
           loggedIn: req.session.loggedIn,
