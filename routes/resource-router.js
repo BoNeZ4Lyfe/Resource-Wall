@@ -19,7 +19,6 @@ module.exports = (db) => {
     getLikedResources(db, userID)
       .then(resources => {
         for (const resource of resources) {
-          console.log("Liked Stage: ", resource);
           resourceIDs.push(resource.id);
           myResources.push(resource);
         }
@@ -30,7 +29,6 @@ module.exports = (db) => {
           if (resourceIDs.includes(resource.id)) {
             continue;
           }
-          console.log("Created Stage: ", resource);
           resourceIDs.push(resource.id);
           myResources.push(resource);
         }
@@ -61,9 +59,8 @@ module.exports = (db) => {
 
   router.post("/comments", (req, res) => {
     const { comment, resource_id } = req.body;
-    console.log(req.body)
     const user_id = req.session.userID;
-    console.log(user_id, resource_id, comment);
+
 
     let query = `
     INSERT INTO resource_comments (resource_id, user_id, comment) VALUES ($1, $2, $3) RETURNING *;
@@ -101,7 +98,6 @@ module.exports = (db) => {
       .then(() => getComments(db, req.params.id))
       .then((comments) => {
         templateVars.comments = comments;
-        console.log(templateVars.resource);
         res.render("resources_id", templateVars);
       })
       .catch((err) =>

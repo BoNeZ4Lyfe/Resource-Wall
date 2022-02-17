@@ -41,10 +41,10 @@ const updateUser = (db, property, id, update) => {
 
 const searchForResourceData = (db, search) => {
   const queryString = `
-    SELECT url, title, topic, description, resources.created_at, resources.id, users.name as creator, avg(ratings.rating) as rating, (SELECT count(*) as likes FROM user_likes WHERE resource_id = resources.id), (SELECT count(*) as count FROM resource_comments WHERE resource_id = resources.id)
+    SELECT url, title, topic, description, resources.created_at, resources.id, users.name as creator, coalesce(avg(ratings.rating), 0) as rating, (SELECT count(*) as likes FROM user_likes WHERE resource_id = resources.id), (SELECT count(*) as count FROM resource_comments WHERE resource_id = resources.id)
     FROM resources
-    JOIN users ON user_id = users.id
-    JOIN ratings ON ratings.resource_id = resources.id
+    LEFT JOIN users ON user_id = users.id
+    LEFT JOIN ratings ON ratings.resource_id = resources.id
     WHERE title LIKE ('%' || $1 || '%') OR description LIKE ('%' || $1 || '%') OR topic LIKE ('%' || $1 || '%')
     GROUP BY resources.url, resources.title, resources.description, resources.topic, resources.created_at, resources.id, users.name
     ORDER BY rating DESC, likes DESC;`
@@ -59,11 +59,11 @@ const searchForResourceData = (db, search) => {
 
 const getLikedResources = (db, userID) => {
   const queryUserLikes = `
-  SELECT url, title, topic, description, resources.created_at, resources.id, users.name as creator, avg(ratings.rating) as rating, (SELECT count(resource_comments.id) as comments FROM resource_comments WHERE resource_comments.resource_id = resources.id), (SELECT count(user_likes.id) as likes FROM user_likes WHERE user_likes.resource_id = resources.id)
+  SELECT url, title, topic, description, resources.created_at, resources.id, users.name as creator, coalesce(avg(ratings.rating), 0) as rating, (SELECT count(resource_comments.id) as comments FROM resource_comments WHERE resource_comments.resource_id = resources.id), (SELECT count(user_likes.id) as likes FROM user_likes WHERE user_likes.resource_id = resources.id)
   FROM resources
-  JOIN users ON resources.user_id = users.id
-  JOIN ratings ON ratings.resource_id = resources.id
-  JOIN user_likes ON user_likes.resource_id = resources.id
+  LEFT JOIN users ON resources.user_id = users.id
+  LEFT JOIN ratings ON ratings.resource_id = resources.id
+  LEFT JOIN user_likes ON user_likes.resource_id = resources.id
   WHERE user_likes.user_id = ${userID}
   GROUP BY url, title, topic, description, resources.created_at, resources.id, users.name;`;
 
@@ -75,10 +75,10 @@ return db
 
 const getUserResources = (db, userID) => {
 const queryUserResources = `
-  SELECT url, title, topic, description, resources.created_at, resources.id, users.name as creator, avg(ratings.rating) as rating, (SELECT count(resource_comments.id) as comments FROM resource_comments WHERE resource_comments.resource_id = resources.id), (SELECT count(user_likes.id) as likes FROM user_likes WHERE user_likes.resource_id = resources.id)
+  SELECT url, title, topic, description, resources.created_at, resources.id, users.name as creator, coalesce(avg(ratings.rating), 0) as rating, (SELECT count(resource_comments.id) as comments FROM resource_comments WHERE resource_comments.resource_id = resources.id), (SELECT count(user_likes.id) as likes FROM user_likes WHERE user_likes.resource_id = resources.id)
   FROM resources
-  JOIN users ON resources.user_id = users.id
-  JOIN ratings ON ratings.resource_id = resources.id
+  LEFT JOIN users ON resources.user_id = users.id
+  LEFT JOIN ratings ON ratings.resource_id = resources.id
   WHERE resources.user_id = ${userID}
   GROUP BY url, title, topic, description, resources.created_at, resources.id, users.name;`;
 
@@ -92,9 +92,9 @@ const getSpecificResource = (db, resourceID) => {
   const queryString = `
     SELECT url, title, topic, description, created_at, users.name as creator, coalesce(avg(ratings.rating), 0) as rating, resources.id, resources.user_id, (SELECT count(*) as likes FROM user_likes WHERE resource_id = $1)
     FROM resources
-    FULL OUTER JOIN users ON user_id = users.id
-    FULL OUTER JOIN user_likes ON user_likes.resource_id = resources.id
-    FULL OUTER JOIN ratings ON ratings.resource_id = resources.id
+    LEFT JOIN users ON user_id = users.id
+    LEFT JOIN user_likes ON user_likes.resource_id = resources.id
+    LEFT JOIN ratings ON ratings.resource_id = resources.id
     WHERE resources.id = $1
     GROUP BY resources.url, resources.title, resources.description, resources.topic, resources.created_at, users.name, resources.id, users.id
     ORDER BY rating, likes;`
