@@ -19,6 +19,7 @@ module.exports = (db) => {
     getLikedResources(db, userID)
       .then(resources => {
         for (const resource of resources) {
+          console.log("Stage 1: ", resource);
           resourceIDs.push(resource.id);
           myResources.push(resource);
         }
@@ -26,9 +27,10 @@ module.exports = (db) => {
       .then(() => getUserResources(db, userID))
       .then(resources => {
         for (const resource of resources) {
-          if (myResources.includes(resource.id)) {
+          if (resourceIDs.includes(resource.id)) {
             continue;
           }
+          console.log("Stage 2: ", resource);
           resourceIDs.push(resource.id);
           myResources.push(resource);
         }
@@ -52,7 +54,7 @@ module.exports = (db) => {
     createResource(resource, userID, db)
       .then((input) => {
         console.log("resources collected: ", input);
-        res.redirect("/");
+        return res.redirect(`/resources/${resource.id}`);
       })
       .catch((err) => err.message);
   });
@@ -78,7 +80,7 @@ module.exports = (db) => {
 
   router.post("/new", (req, res) => {
     const { title, url, description, topic } = req.body;
-    const user_id = req.session.userId;
+    const user_id = req.session.userID;
 
     let query = `
     INSERT INTO resources (user_id, topic, url, title, description) VALUES ($1, $2, $3, $4, $5) RETURNING *;
@@ -86,9 +88,7 @@ module.exports = (db) => {
     const values = [user_id, topic, url, title, description];
 
     db.query(query, values)
-      .then(() => {
-        res.send("OK");
-      })
+      .then(res => console.log(res))
       .catch((err) =>
         console.log("Can not post the created resource: ", err.message)
       );
