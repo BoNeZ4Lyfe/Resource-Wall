@@ -19,11 +19,6 @@ $(() => {
     const resourceDescription = $("#resource_description").val();
     const resourceTopic = $("#resource_topic").val();
 
-    console.log("TITLE:", resourceTitle);
-    console.log("URL:", resourceUrl);
-    console.log("Description:", resourceDescription);
-    console.log("TOPIC", resourceTopic);
-
     $.ajax({
       type: "POST",
       url: "/resources/new",
@@ -36,11 +31,5 @@ $(() => {
     }).then(() => {
       window.location.href = `/resources`;
     });
-
-    //     $("#comment-create").toggle();
-
-    //     $(".btn--new").toggle();
-
-    //     $(".resource-containter").toggle();
   });
 });

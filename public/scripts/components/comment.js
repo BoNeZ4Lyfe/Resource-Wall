@@ -18,7 +18,10 @@ $(() => {
   $("#comment-create").on("submit", (e) => {
     e.preventDefault();
     const comment = $("#comment-text").val();
-    console.log("comment:", comment);
+    console.log("🐥🔴", comment);
+
+    const userIdOnResources = $(".resource").attr("id");
+    console.log("USER ID", userIdOnResources);
 
     $.ajax({
       type: "POST",
@@ -27,11 +30,5 @@ $(() => {
     }).then(() => {
       window.location.href = `/resources/${idOnResource}`;
     });
-
-    // $("#comment-create").toggle();
-
-    // $(".btn--new").toggle();
-
-    // $(".resource-containter").toggle();
   });
 });

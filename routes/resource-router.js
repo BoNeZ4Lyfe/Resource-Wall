@@ -1,12 +1,18 @@
 const express = require("express");
-const { getSpecificResource, getComments, likeResource, rateResource, createResource } = require("../public/scripts/helpers");
+const {
+  getSpecificResource,
+  getComments,
+  likeResource,
+  rateResource,
+  createResource,
+} = require("../public/scripts/helpers");
 const router = express.Router();
 
 module.exports = (db) => {
   router.get("/", (req, res) => {
     db.query(
       `
-      SELECT resources.*, users.*, COUNT(resource_comments.id) AS count
+      SELECT resources.*, users.*,COUNT(resource_comments.id) AS count
       FROM resources
       JOIN users ON user_id = users.id
       JOIN resource_comments ON resources.id = resource_id
@@ -36,16 +42,16 @@ module.exports = (db) => {
     console.log(resource);
     createResource(resource, userID, db)
       .then((input) => {
-        console.log('resources collected: ', input);
+        console.log("resources collected: ", input);
         res.redirect("/");
       })
       .catch((err) => err.message);
   });
 
   router.post("/comments", (req, res) => {
-
     const { comment, resource_id } = req.body;
     const user_id = req.session.userID; // changed from userId. comments work great!
+    console.log("USERID", req.session);
 
     let query = `
     INSERT INTO resource_comments (resource_id, user_id, comment) VALUES ($1, $2, $3) RETURNING *;
@@ -63,10 +69,6 @@ module.exports = (db) => {
   router.post("/new", (req, res) => {
     const { title, url, description, topic } = req.body;
     const user_id = req.session.userId;
-    console.log("TITLE:", title);
-    console.log("URL:", url);
-    console.log("Description:", description);
-    console.log("Topic:", topic);
 
     let query = `
     INSERT INTO resources (user_id, topic, url, title, description) VALUES ($1, $2, $3, $4, $5) RETURNING *;
@@ -74,8 +76,7 @@ module.exports = (db) => {
     const values = [user_id, topic, url, title, description];
 
     db.query(query, values)
-      .then((result) => {
-        console.log("🔴", result.rows[0]);
+      .then(() => {
         res.send("OK");
       })
       .catch((err) =>
@@ -110,9 +111,9 @@ module.exports = (db) => {
     const rating = req.body.rating;
 
     if (rating) {
-      rateResource(db, resourceID, userID, rating)
+      rateResource(db, resourceID, userID, rating);
     } else {
-      likeResource(db, resourceID, userID)
+      likeResource(db, resourceID, userID);
     }
   });
 
