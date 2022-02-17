@@ -113,6 +113,7 @@ module.exports = (db) => {
     } else {
       likeResource(db, resourceID, userID);
     }
+    res.json({result: "Post complete 🥳"});
   });
 
   return router;

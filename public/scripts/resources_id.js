@@ -36,12 +36,17 @@ $(() => {
 
   loadComments("all");
 
-  $("#like").on("click", () => {
-    $.post("/resources/:id", {
-      resource: resource.id,
-      user: resource.user_id,
-    }).done(() => {
-      console.log("Why do I have to suffer?");
-    });
+  const resourceID = $(".resource-content").attr("id");
+  const userID = $(".creator").attr("id");
+
+  console.log(resourceID, userID);
+
+  $("#like").on("click", (e) => {
+    e.preventDefault();
+    console.log("test");
+
+    $.post("/resources/:id", { resource: resource.id, user: resource.user_id })
+      .done(() => location.reload())
+      .catch(err => console.log("like click: ", err.message));
   });
 });
