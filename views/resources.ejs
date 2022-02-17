@@ -82,10 +82,10 @@
               <article class="resource">
                 <header class="resource-head-foot">
                   <h4>
-                    <%= resource.title %>
+                    <a href="/resources/<%= resource.id %>"><%= resource.title %></a>
                   </h4>
                   <h4>
-                    <%= resource.topic %>
+                    <a href="/search?search=<%= resource.topic %>"><%= resource.topic %></a>
                   </h4>
                 </header>
                 <div class="resource-content">
