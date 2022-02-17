@@ -1,36 +1,17 @@
 const express = require("express");
-<<<<<<< HEAD
+const router = express.Router();
 const {
   getSpecificResource,
   getComments,
   likeResource,
   rateResource,
   createResource,
-} = require("../public/scripts/helpers");
-=======
->>>>>>> master
-const router = express.Router();
-const {
-  getSpecificResource,
-  getComments,
-  likeResource, rateResource,
-  createResource,
   selectMyResources
 } = require("../public/scripts/helpers");
 
 module.exports = (db) => {
   router.get("/", (req, res) => {
-    db.query(
-      `
-      SELECT resources.*, users.*,COUNT(resource_comments.id) AS count
-      FROM resources
-      JOIN users ON user_id = users.id
-      JOIN resource_comments ON resources.id = resource_id
-      GROUP BY resources.id, users.id
-    ;`
-    )
-      .then((data) => {
-        // console.log("DATA", data.rows);
+
     const userID = req.session.userID;
     const myResources = [];
 
@@ -136,3 +117,4 @@ module.exports = (db) => {
 
   return router;
 };
+

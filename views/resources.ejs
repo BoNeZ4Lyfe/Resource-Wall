@@ -79,28 +79,6 @@
               <h4>
                 <%= resource.topic %>
               </h4>
-
-<<<<<<< HEAD
-      <div class="resource-containter">
-        <% for(const resource of locals.resources) { %>
-        <article class="resource" id="<%= resource.user_id %>" >
-          <header>
-            <div class="resource-title">
-              <span><%= resource.title %></span>
-            </div>
-            <span class="resource-url"><%= resource.url %></span>
-          </header>
-          <div class="resource-content" id="<%= resource.id %>" >
-            <p><%= resource.description %></p>
-            <p><%= resource.count %> comments</p>
-          </div>
-          <footer>
-              <button class="btn btn--comment" type="submit">Add comment</button>
-            <p>LIKES</p>
-          </footer>
-        </article>
-        <% } %>
-=======
             </header>
             <div class="resource-content" id="<%= resource.id %>">
               <a href="<%= resource.url %>">
@@ -131,7 +109,6 @@
             </footer>
           </article>
           <% } %>
->>>>>>> master
       </div>
     </main>
 </body>
