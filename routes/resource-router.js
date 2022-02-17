@@ -101,6 +101,7 @@ module.exports = (db) => {
       .then(() => getComments(db, req.params.id))
       .then((comments) => {
         templateVars.comments = comments;
+        console.log(templateVars.resource);
         res.render("resources_id", templateVars);
       })
       .catch((err) =>
