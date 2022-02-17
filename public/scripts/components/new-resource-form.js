@@ -9,7 +9,7 @@ $(() => {
 
     $(".btn--new").toggle();
 
-    $(".resource-containter").toggle();
+    $(".resource-container").toggle();
   });
 
   $("#resource-create").on("submit", (e) => {
@@ -18,11 +18,6 @@ $(() => {
     const resourceUrl = $("#resource_url").val();
     const resourceDescription = $("#resource_description").val();
     const resourceTopic = $("#resource_topic").val();
-
-    console.log("TITLE:", resourceTitle);
-    console.log("URL:", resourceUrl);
-    console.log("Description:", resourceDescription);
-    console.log("TOPIC", resourceTopic);
 
     $.ajax({
       type: "POST",
@@ -37,10 +32,5 @@ $(() => {
       window.location.href = `/resources`;
     });
 
-    //     $("#comment-create").toggle();
-
-    //     $(".btn--new").toggle();
-
-    //     $(".resource-containter").toggle();
   });
 });

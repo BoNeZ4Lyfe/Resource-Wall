@@ -12,10 +12,8 @@
   <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
 <<<<<<< HEAD
   <script type="text/javascript" src="/scripts/search.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/timeago.js/4.0.2/timeago.min.js"
-    integrity="sha512-SVDh1zH5N9ChofSlNAK43lcNS7lWze6DTVx1JCXH1Tmno+0/1jMpdbR8YDgDUfcUrPp1xyE53G42GFrcM0CMVg=="
-    crossorigin="anonymous" referrerpolicy="no-referrer">
-    </script>
+  <script type="text/javascript" src="/scripts/components/comment.js"></script>
+
   <script>const searchResults = '<%- JSON.stringify(result) %>';</script>
 =======
   <script type="text/javascript" src="/scripts/app.js"></script>
@@ -37,33 +35,54 @@
         </h3>
         <p>Your search returned <%= result.length %> results!</p>
       </div>
-      <div class="resource-containter">
+
+      <main>
+        <form action="/resources/comment" method="post" id="comment-create" class="new-comment-form hide">
+          <div class="new-comment-form">
+            <label for="new-comment">Comment</label>
+            <textarea name="text" id="comment-text" placeholder="Add some comments"></textarea>
+          </div>
+          <button type="submit">Submit</button>
+        </form>
+
+      <div class="resource-container show">
         <% for (const resource of result) { %>
           <article class="resource">
             <header class="resource-head-foot">
 
-                <h4>
-                  <%= resource.title %>
-                </h4>
-                <h4><%= resource.topic %></h4>
+              <h4>
+                <%= resource.title %>
+              </h4>
+              <h4>
+                <%= resource.topic %>
+              </h4>
 
             </header>
-            <div class="resource-content" id="<%= resource.id %>">
+            <div class="resource-content">
               <a href="<%= resource.url %>">
                 <%= resource.url %>
               </a>
               <p>
                 <%= resource.description %>
               </p>
-              <p>
-                <%= resource.count %> comments
-              </p>
+              <div class="spread full">
+                <p>
+                  Created by <%= resource.creator %>
+                </p>
+                <p>
+                  <%= resource.count %> comments
+                </p>
+              </div>
             </div>
             <footer class="resource-head-foot">
-              <button class="btn btn--comment" name="<%= resource.id %>" type="submit">Add comment</button>
-              <div id="likes-rates">
-                <p><%= Math.round((Number(resource.rating) + Number.EPSILON) * 100) / 100 %> ⭐️</p>
-                <p><%= resource.likes %> 👍</p>
+              <button class="btn btn--comment" id="<%= resource.id %>" type="submit">Add comment</button>
+              <div class="spread small">
+                <p>
+                  <%= Math.round((Number(resource.rating) + Number.EPSILON) * 100) / 100 %> ⭐️
+                </p>
+                <p>
+                  <%= resource.likes %> 👍
+                </p>
               </div>
             </footer>
           </article>

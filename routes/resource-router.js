@@ -1,32 +1,49 @@
 const express = require("express");
-const { getSpecificResource, getComments, likeResource, rateResource, createResource } = require("../public/scripts/helpers");
 const router = express.Router();
+const {
+  getSpecificResource,
+  getComments,
+  likeResource,
+  rateResource,
+  createResource,
+  getLikedResources,
+  getUserResources
+} = require("../public/scripts/helpers");
 
 module.exports = (db) => {
   router.get("/", (req, res) => {
-    db.query(
-      `
-      SELECT resources.*, users.*, COUNT(resource_comments.id) AS count
-      FROM resources
-      JOIN users ON user_id = users.id
-      JOIN resource_comments ON resources.id = resource_id
-      GROUP BY resources.id, users.id
-    ;`
-    )
-      .then((data) => {
-        // console.log("DATA", data.rows);
+    const userID = req.session.userID;
+    const myResources = [];
+    const resourceIDs = [];
+
+    getLikedResources(db, userID)
+      .then(resources => {
+        for (const resource of resources) {
+          console.log("Stage 1: ", resource);
+          resourceIDs.push(resource.id);
+          myResources.push(resource);
+        }
+      })
+      .then(() => getUserResources(db, userID))
+      .then(resources => {
+        for (const resource of resources) {
+          if (resourceIDs.includes(resource.id)) {
+            continue;
+          }
+          console.log("Stage 2: ", resource);
+          resourceIDs.push(resource.id);
+          myResources.push(resource);
+        }
         const templateVars = {
-          resources: data.rows,
+          resources: myResources,
           loggedIn: req.session.loggedIn,
           userID: req.session.userID,
           username: req.session.username,
         };
-        // res.json(data.rows); // Not API request anymore
-        res.render("resources", templateVars); // <---- new edit
+
+        res.render("resources", templateVars);
       })
-      .catch((err) => {
-        res.status(500).json({ error: err.message });
-      });
+      .catch((err) => console.log("Resources GET: ", err.message));
   });
 
   router.post("/", (req, res) => {
@@ -36,16 +53,17 @@ module.exports = (db) => {
     console.log(resource);
     createResource(resource, userID, db)
       .then((input) => {
-        console.log('resources collected: ', input);
-        res.redirect("/");
+        console.log("resources collected: ", input);
+        return res.redirect(`/resources/${resource.id}`);
       })
       .catch((err) => err.message);
   });
 
   router.post("/comments", (req, res) => {
-
     const { comment, resource_id } = req.body;
-    const user_id = req.session.userID; // changed from userId. comments work great!
+    console.log(req.body)
+    const user_id = req.session.userID;
+    console.log(user_id, resource_id, comment);
 
     let query = `
     INSERT INTO resource_comments (resource_id, user_id, comment) VALUES ($1, $2, $3) RETURNING *;
@@ -62,11 +80,7 @@ module.exports = (db) => {
 
   router.post("/new", (req, res) => {
     const { title, url, description, topic } = req.body;
-    const user_id = req.session.userId;
-    console.log("TITLE:", title);
-    console.log("URL:", url);
-    console.log("Description:", description);
-    console.log("Topic:", topic);
+    const user_id = req.session.userID;
 
     let query = `
     INSERT INTO resources (user_id, topic, url, title, description) VALUES ($1, $2, $3, $4, $5) RETURNING *;
@@ -74,10 +88,7 @@ module.exports = (db) => {
     const values = [user_id, topic, url, title, description];
 
     db.query(query, values)
-      .then((result) => {
-        console.log("🔴", result.rows[0]);
-        res.send("OK");
-      })
+      .then(res => console.log(res))
       .catch((err) =>
         console.log("Can not post the created resource: ", err.message)
       );
@@ -110,10 +121,11 @@ module.exports = (db) => {
     const rating = req.body.rating;
 
     if (rating) {
-      rateResource(db, resourceID, userID, rating)
+      rateResource(db, resourceID, userID, rating);
     } else {
-      likeResource(db, resourceID, userID)
+      likeResource(db, resourceID, userID);
     }
+    res.json({ result: "Post complete 🥳" });
   });
 
   return router;

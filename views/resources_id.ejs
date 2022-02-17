@@ -31,10 +31,10 @@
         <h4><%= resource.title %></h4>
         <h4><%= resource.topic %></h4>
       </header>
-      <div class="resource-content">
+      <div class="resource-content" id="<%= resource.id %>">
         <a href="<%= resource.url %>"><%= resource.url %></a>
         <p class="main-text"><%= resource.description %></p>
-        <p>Created <a id="timeago"> <%= resource.created_at %></a> by <%= resource.creator %></p>
+        <p class="creator" id="<%= resource.user_id %>">Created <a id="timeago"> <%= resource.created_at %></a> by <%= resource.creator %></p>
       </div>
       <footer class="resource-head-foot">
         <button id="rate"><%= Math.round((Number(resource.rating) + Number.EPSILON) * 100) / 100 %> ⭐️</button>

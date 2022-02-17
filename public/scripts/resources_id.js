@@ -10,10 +10,12 @@ $(() => {
     <article class="comment">
       <div class="resource-content">
         <p class="main-text">${comment.comment}</p>
-        <p>Written ${timeago.format(comment.created_at)} by ${comment.user_name}</p>
+        <p>Written ${timeago.format(comment.created_at)} by ${
+      comment.user_name
+    }</p>
       </div>
     </article>`;
-  }
+  };
 
   const renderComments = (commentArray) => {
     for (const comment of commentArray) {
@@ -33,10 +35,17 @@ $(() => {
 
   loadComments("all");
 
-  $("#like").on("click", () => {
+  const resourceID = $(".resource-content").attr("id");
+  const userID = $(".creator").attr("id");
+
+  console.log(resourceID, userID);
+
+  $("#like").on("click", (e) => {
+    e.preventDefault();
+    console.log("test");
+
     $.post("/resources/:id", { resource: resource.id, user: resource.user_id })
-      .done(() => {
-        console.log("Why do I have to suffer?");
-      });
+      .done(() => location.reload())
+      .catch(err => console.log("like click: ", err.message));
   });
 });

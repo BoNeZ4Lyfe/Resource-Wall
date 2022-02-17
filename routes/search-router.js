@@ -26,7 +26,6 @@ module.exports = (db) => {
         res.render("search", templateVars);
       })
       .catch(err => console.log("Search GET: ", err.message));
-
   });
 
   return router;
