@@ -1,5 +1,5 @@
 const express = require("express");
-const { getUsers, userEmailLookup, usernameLookup, updateUser } = require("../public/scripts/helpers");
+const { getUsers, userEmailLookup, usernameLookup, updateUser } = require("./helpers");
 const router = express.Router();
 
 module.exports = (db) => {

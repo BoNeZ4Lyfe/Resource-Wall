@@ -1,5 +1,5 @@
 const express = require("express");
-const { searchForResourceData } = require("../public/scripts/helpers");
+const { searchForResourceData } = require("./helpers");
 const router = express.Router();
 
 // ideally this will be moved to resource-router at some point today
