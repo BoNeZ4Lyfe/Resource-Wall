@@ -35,11 +35,6 @@ $(() => {
 
   loadComments("all");
 
-  const resourceID = $(".resource-content").attr("id");
-  const userID = $(".creator").attr("id");
-
-  // console.log(resourceID, userID);
-
   $("#like").on("click", (e) => {
     e.preventDefault();
     console.log("test");
