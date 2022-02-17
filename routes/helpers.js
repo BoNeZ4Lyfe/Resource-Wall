@@ -209,7 +209,10 @@ const addUser = function (user, db) {
 
 const createResource = function (resource, userID, db) {
   const values = [resource.topic, resource.url, resource.title, resource.description];
-  const queryStr = `INSERT INTO resources (user_id, topic, url, title, description) VALUES (${userID}, $1, $2, $3, $4);`;
+  const queryStr = `
+  INSERT INTO resources (user_id, topic, url, title, description)
+  VALUES (${userID}, $1, $2, $3, $4)
+  RETURNING *;`;
 
   return db
     .query(queryStr, values)

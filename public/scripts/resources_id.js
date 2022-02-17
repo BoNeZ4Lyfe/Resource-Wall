@@ -1,6 +1,19 @@
 $(() => {
-  const resource = JSON.parse(resourceData);
+  // preserve newlines, etc - use valid JSON
+  commentsData = commentsData.replace(/\\n/g, "\\n")
+    .replace(/\\'/g, "\\'")
+    .replace(/\\"/g, '\\"')
+    .replace(/\\&/g, "\\&")
+    .replace(/\\r/g, "\\r")
+    .replace(/\\t/g, "\\t")
+    .replace(/\\b/g, "\\b")
+    .replace(/\\f/g, "\\f");
+  // remove non-printable and other non-valid JSON chars
+  commentsData = commentsData.replace(/[\u0000-\u0019]+/g, "");
   const comments = JSON.parse(commentsData);
+  const resource = JSON.parse(resourceData);
+  console.log(resource);
+  console.log(comments);
 
   createdAt = $("#timeago").html();
   $("#timeago").html(timeago.format(createdAt));
@@ -10,9 +23,8 @@ $(() => {
     <article class="comment">
       <div class="resource-content">
         <p class="main-text">${comment.comment}</p>
-        <p>Written ${timeago.format(comment.created_at)} by ${
-      comment.user_name
-    }</p>
+        <p>Written ${timeago.format(comment.created_at)} by ${comment.user_name
+      }</p>
       </div>
     </article>`;
   };
@@ -34,11 +46,6 @@ $(() => {
   };
 
   loadComments("all");
-
-  const resourceID = $(".resource-content").attr("id");
-  const userID = $(".creator").attr("id");
-
-  console.log(resourceID, userID);
 
   $("#like").on("click", (e) => {
     e.preventDefault();

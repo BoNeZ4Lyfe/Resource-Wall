@@ -29,7 +29,7 @@ $(() => {
         topic: resourceTopic,
       },
     }).then(() => {
-      window.location.href = `/resources`;
+      window.location.href = "/resources";
     });
 
   });

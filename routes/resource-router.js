@@ -79,19 +79,12 @@ module.exports = (db) => {
   });
 
   router.post("/new", (req, res) => {
-    const { title, url, description, topic } = req.body;
+    const resource = req.body;
     const user_id = req.session.userID;
 
-    let query = `
-    INSERT INTO resources (user_id, topic, url, title, description) VALUES ($1, $2, $3, $4, $5) RETURNING *;
-    `;
-    const values = [user_id, topic, url, title, description];
-
-    db.query(query, values)
-      .then(res => console.log(res))
-      .catch((err) =>
-        console.log("Can not post the created resource: ", err.message)
-      );
+    createResource(resource, user_id, db)
+      .then(result => console.log(result))
+      .catch(err => console.log("POST new resource: ", err));
   });
 
   router.get("/:id", (req, res) => {
