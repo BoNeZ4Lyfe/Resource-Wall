@@ -45,8 +45,6 @@ $(() => {
     }
   };
 
-  loadComments("all");
-
   $("#like").on("click", (e) => {
     e.preventDefault();
     console.log("test");
@@ -55,4 +53,6 @@ $(() => {
       .done(() => location.reload())
       .catch((err) => console.log("like click: ", err.message));
   });
+
+  loadComments("all");
 });

@@ -1,6 +1,5 @@
 $(() => {
   const resource = JSON.parse(resourceData);
-
   //start of rating tool
   $("#rate").on("click", (e) => {
     e.preventDefault;

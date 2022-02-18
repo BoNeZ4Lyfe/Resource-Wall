@@ -9,11 +9,6 @@
   <link rel="stylesheet" href="/styles/main.css" type="text/css" />
   <link rel="stylesheet" href="/styles/layout.css" type="text/css" />
   <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
-
-  <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
-
-  <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
-
   <script type="text/javascript" src="/scripts/components/new-resource-form.js"></script>
   <script type="text/javascript" src="/scripts/components/comment.js"></script>
 
@@ -105,12 +100,8 @@
                 <footer class="resource-head-foot">
                   <button class="btn btn--comment" id="<%= resource.id %>" type="submit">Add comment</button>
                   <div class="spread small">
-                    <p>
-                      <%= Math.round((Number(resource.rating) + Number.EPSILON) * 100) / 100 %> ⭐️
-                    </p>
-                    <p>
-                      <%= resource.likes %> 👍
-                    </p>
+                      <p><%= Math.round((Number(resource.rating) + Number.EPSILON) * 100) / 100 %> ⭐️</p>
+                      <p><%= resource.likes %> 👍</p>
                   </div>
                 </footer>
               </article>
