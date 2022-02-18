@@ -12,8 +12,6 @@ $(() => {
   commentsData = commentsData.replace(/[\u0000-\u0019]+/g, "");
   const comments = JSON.parse(commentsData);
   const resource = JSON.parse(resourceData);
-  console.log(resource);
-  console.log(comments);
 
   createdAt = $("#timeago").html();
   $("#timeago").html(timeago.format(createdAt));

@@ -8,7 +8,7 @@ $(() => {
       $("#comment-create").addClass("show");
     }
 
-    $(".btn--new").toggle();
+    $(".btn-secondary").toggle();
 
     $(".resource-container").toggle();
     idOnResource = $(this).attr("id");
