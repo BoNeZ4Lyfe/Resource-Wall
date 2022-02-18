@@ -10,10 +10,8 @@
   <link rel="stylesheet" href="/styles/layout.css" type="text/css" />
   <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
 
-<<<<<<< HEAD
+  <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
 
-=======
->>>>>>> master
   <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
 
   <script type="text/javascript" src="/scripts/components/new-resource-form.js"></script>
@@ -21,67 +19,12 @@
 
   <link href="https://fonts.googleapis.com/css2?family=Reggae+One&display=swap" rel="stylesheet">
 
-<<<<<<< HEAD
-</head>
-=======
->>>>>>> master
 
 </head>
 
     <body>
       <%- include('partials/_header') %>
 
-<<<<<<< HEAD
-        <main>
-          <form action="/resources/comment" method="post" id="comment-create" class="new-comment-form hide">
-            <div class="new-comment-form">
-              <label for="new-comment">Comment</label>
-              <textarea name="text" id="comment-text" placeholder="Add some comments"></textarea>
-            </div>
-            <button type="submit">Submit</button>
-          </form>
-
-          <div>
-            <button class="btn btn--new show">Add new</button>
-          </div>
-
-          <form action="/resources/new" method="post" id="resource-create" class="new-resource-form hide">
-            <div class="new-resource-title">
-              <label for="new-resource-title">Title</label>
-              <input id="resource_title" type="text" name="title" placeholder="Title">
-            </div>
-
-            <div class="new-resource-url">
-              <label for="new-resource-url">URL</label>
-              <input id="resource_url" type="url" name="url" placeholder="URL">
-            </div>
-
-            <div class="new-resource-description">
-              <label for="new-property-form__description">Description</label>
-              <textarea id="resource_description" placeholder="Description" name="description" cols="30"
-                rows="10"></textarea>
-            </div>
-
-            <label for="topic">Choose a topic:</label>
-            <select id="resource_topic" name="topic">
-              <optgroup label="Markup/Design">
-                <option value=""></option>
-                <option value="html">HTML</option>
-                <option value="css">CSS</option>
-                <option value="scss">SASS</option>
-              </optgroup>
-              <optgroup label="Languages">
-                <option value="javascript">JavaScript</option>
-                <option value="python">Python</option>
-                <option value="java">Java</option>
-                <option value="php">PHP</option>
-              </optgroup>
-              <option value="others">Others</option>
-            </select>
-            </div>
-            <button type="submit">Submit</button>
-          </form>
-=======
     <main>
       <form action="/resources/comment" method="post" id="comment-create" class="new-comment-form hide">
         <div class="new-comment-form">
@@ -132,7 +75,6 @@
         <button type="submit">Submit</button>
       </form>
 
->>>>>>> master
           <div class="resource-container show">
             <% for(const resource of resources) { %>
               <article class="resource">
