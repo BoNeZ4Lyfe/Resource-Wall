@@ -21,8 +21,8 @@
 </head>
 
 <body>
+  <%- include('partials/_header') %>
   <main>
-    <%- include('partials/_header') %>
       <div class="page-title">
         <h3>You searched for <%= query %>
         </h3>
@@ -55,7 +55,7 @@
               <a href="<%= resource.url %>">
                 <%= resource.url %>
               </a>
-              <p>
+              <p class="main-text">
                 <%= resource.description %>
               </p>
               <div class="spread full">

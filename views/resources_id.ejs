@@ -25,11 +25,12 @@
 
 <body>
   <%- include('partials/_header') %>
-    <main id="resource-main">
+    <main>
+      <div id="resource-main">
 
       <header class="resource-head-foot">
         <h4><%= resource.title %></h4>
-        <h4><%= resource.topic %></h4>
+        <h4><a href="/search?search=<%= resource.topic %>"><%= resource.topic %></a></h4>
       </header>
       <div class="resource-content" id="<%= resource.id %>">
         <a href="<%= resource.url %>"><%= resource.url %></a>
@@ -37,22 +38,23 @@
         <p class="creator" id="<%= resource.user_id %>">Created <a id="timeago"> <%= resource.created_at %></a> by <%= resource.creator %></p>
       </div>
       <footer class="resource-head-foot">
-        <button id="rate"><%= Math.round((Number(resource.rating) + Number.EPSILON) * 100) / 100 %> ⭐️</button>
+        <button id="rate" class="rate"><%= Math.round((Number(resource.rating) + Number.EPSILON) * 100) / 100 %> ⭐️</button>
         <div class="hide" id="rating-tool">
-          <button class="rate-star" id="st1">1 ⭐️</button>
-          <button class="rate-star" id="st2">2 ⭐️</button>
-          <button class="rate-star" id="st3">3 ⭐️</button>
-          <button class="rate-star" id="st4">4 ⭐️</button>
-          <button class="rate-star" id="st5">5 ⭐️</button>
+          <button class="rate star" id="st1">1 ⭐️</button>
+          <button class="rate star" id="st2">2 ⭐️</button>
+          <button class="rate star" id="st3">3 ⭐️</button>
+          <button class="rate star" id="st4">4 ⭐️</button>
+          <button class="rate star" id="st5">5 ⭐️</button>
         </div>
-        <button id="like"><%= resource.likes %> 👍</button>
+        <button id="like" class="rate"><%= resource.likes %> 👍</button>
       </footer>
-
-    </main>
+    </div>
 
     <section id="comments">
       <%# comments will be output here %>
     </section>
+    </main>
+
 </body>
 
 </html>

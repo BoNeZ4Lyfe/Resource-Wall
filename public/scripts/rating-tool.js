@@ -1,6 +1,7 @@
 $(() => {
   const resource = JSON.parse(resourceData);
 
+  //start of rating tool
   $("#rate").on("click", (e) => {
     e.preventDefault;
     $("#rate").hide();
@@ -57,4 +58,5 @@ $(() => {
       .done(() => location.reload())
       .catch(err => console.log("rate click: ", err.message));
   });
+  //end of rating tool
 })
