@@ -95,15 +95,6 @@ const getUserResources = (db, userID) => {
 };
 
 const getSpecificResource = (db, resourceID) => {
-  // const queryString = `
-  //   SELECT url, title, topic, description, created_at, users.name as creator, avg(ratings.rating) as rating, resources.id, resources.user_id, (SELECT count(*) as likes FROM user_likes WHERE resource_id = $1)
-  //   FROM resources
-  //   JOIN users ON user_id = users.id
-  //   JOIN user_likes ON user_likes.resource_id = resources.id
-  //   JOIN ratings ON ratings.resource_id = resources.id
-  //   WHERE resources.id = $1
-  //   GROUP BY resources.url, resources.title, resources.description, resources.topic, resources.created_at, users.name, resources.id, users.id
-  //   ORDER BY rating, likes;`;
   const queryString = `SELECT url, title, topic, description, created_at, users.name as creator, avg(ratings.rating) as rating, resources.id, resources.user_id, (SELECT count(*) as likes FROM user_likes WHERE resource_id = $1)
     FROM resources
     LEFT JOIN users ON user_id = users.id
