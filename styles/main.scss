@@ -41,6 +41,9 @@ nav {
   color: white;
   width: 60%;
   text-align: center;
+  background: rgba(0, 0, 0, .7);
+  border: 3px solid #00B4D8;
+  border-radius: 10px;
 }
 
 .unordered-list, .welcome{
@@ -160,3 +163,6 @@ article.resource {
   width: 100%;
 }
 
+.unordered-list {
+  text-align: left;
+}
